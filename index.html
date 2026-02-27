@@ -5,143 +5,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposta Comercial | KYNTO</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <style>
-        body { background-color: #f1f5f9; color: #334155; font-family: 'Inter', sans-serif; }
-        .proposal-container { max-width: 900px; margin: 40px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
-        
-        /* Editáveis só funcionam se não estiver assinado */
-        .modo-edicao [contenteditable="true"]:hover { background-color: #f8fafc; box-shadow: 0 0 0 1px #cbd5e1 dashed; cursor: text; border-radius: 4px;}
-        .modo-edicao [contenteditable="true"]:focus { background-color: #ffffff; box-shadow: 0 0 0 2px #0082CD; outline: none; }
-        
-        /* Esconde botões de controle no modo cliente/assinado */
-        .modo-cliente .btn-admin { display: none !important; }
-        .modo-cliente [contenteditable="true"] { pointer-events: none; } /* Bloqueia edição */
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { kynto: { blue: '#0082CD', dark: '#0B0E14' } },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Space Grotesk', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
 
-        @media print {
-            body { background-color: #ffffff; }
-            .proposal-container { box-shadow: none; margin: 0; max-width: 100%; }
-            .no-print { display: none !important; }
+    <style>
+        body { background-color: #f1f5f9; color: #334155; }
+        .proposal-container {
+            max-width: 900px; margin: 40px auto; background: #ffffff;
+            border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden;
         }
 
-        /* Modal de Assinatura */
-        #modal-assinatura { display: none; background: rgba(11, 14, 20, 0.8); backdrop-filter: blur(4px); }
+        /* ESTILOS MODO EDIÇÃO (Admin) */
+        .modo-edicao [contenteditable="true"] {
+            transition: all 0.2s ease; border-radius: 4px; padding: 2px 4px; margin: -2px -4px;
+        }
+        .modo-edicao [contenteditable="true"]:hover {
+            background-color: #f8fafc; box-shadow: 0 0 0 1px #cbd5e1 dashed; cursor: text;
+        }
+        .modo-edicao [contenteditable="true"]:focus {
+            background-color: #ffffff; box-shadow: 0 0 0 2px #0082CD; outline: none;
+        }
+        .modo-edicao .btn-remove-row { opacity: 0; transition: opacity 0.2s; }
+        .modo-edicao tr:hover .btn-remove-row { opacity: 1; }
+
+        /* ESTILOS MODO CLIENTE (Visualização) */
+        .modo-cliente .btn-admin { display: none !important; }
+        .modo-cliente [contenteditable="true"] { pointer-events: none; padding: 0; margin: 0; outline: none; }
+        
+        /* IMPRESSÃO / PDF */
+        @media print {
+            body { background-color: #ffffff; }
+            .proposal-container { box-shadow: none; margin: 0; max-width: 100%; border-radius: 0; }
+            .no-print { display: none !important; }
+            [contenteditable="true"] { padding: 0; margin: 0; box-shadow: none !important; background: transparent !important; }
+        }
+
+        /* Loader Modal */
+        #loader { display: none; background: rgba(255, 255, 255, 0.9); z-index: 9999; }
     </style>
 </head>
 <body class="antialiased modo-edicao" id="body-app">
 
-    <div class="fixed top-6 right-6 flex flex-col gap-3 no-print z-40 btn-admin">
-        <button onclick="salvarNoBanco()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg">
-            <i class="ph-bold ph-cloud-arrow-up text-xl"></i> Gerar Link P/ Cliente
+    <div id="loader" class="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#0082CD]"></div>
+    </div>
+
+    <div id="aviso-admin" class="fixed top-0 left-0 w-full bg-blue-100 text-blue-800 text-center py-2 text-sm font-bold no-print z-50 shadow-md btn-admin">
+        <i class="ph-fill ph-info"></i> MODO CRIAÇÃO: Edite a proposta e clique em "Gerar Link P/ Cliente" para salvar no sistema.
+    </div>
+
+    <div id="controles-admin" class="fixed top-14 right-6 flex flex-col gap-3 no-print z-40 btn-admin">
+        <button onclick="salvarPropostaAPI()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-xl hover:scale-105 transition">
+            <i class="ph-bold ph-cloud-arrow-up text-2xl"></i> Gerar Link P/ Cliente
+        </button>
+        <button onclick="window.print()" class="bg-kynto-dark hover:bg-slate-800 text-white px-5 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg transition">
+            <i class="ph-bold ph-file-pdf text-xl"></i> Salvar PDF Rascunho
+        </button>
+        <button onclick="exportHTMLtoWord('Proposta_KYNTO')" class="bg-[#2b579a] hover:bg-[#1e3e6e] text-white px-5 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg transition">
+            <i class="ph-bold ph-file-doc text-xl"></i> Salvar Word
         </button>
     </div>
 
-    <div class="fixed top-6 right-6 flex-col gap-3 no-print z-40 hidden" id="controles-cliente">
-        <button onclick="abrirModalAssinatura()" id="btn-aceitar" class="bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg text-lg animate-bounce">
+    <div id="controles-cliente" class="fixed top-6 right-6 flex-col gap-3 no-print z-40 hidden">
+        <button onclick="abrirModalAssinatura()" id="btn-aceitar" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-xl text-lg animate-bounce transition">
             <i class="ph-bold ph-check-circle text-2xl"></i> Aceitar Proposta
         </button>
-        <button onclick="window.print()" id="btn-baixar-pdf" class="hidden bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-full font-bold items-center justify-center gap-2 shadow-lg">
-            <i class="ph-bold ph-file-pdf text-xl"></i> Baixar PDF (Cópia)
+        <button onclick="window.print()" id="btn-baixar-pdf" class="hidden bg-kynto-dark hover:bg-slate-800 text-white px-5 py-3 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg transition">
+            <i class="ph-bold ph-file-pdf text-xl"></i> Salvar Cópia (PDF)
         </button>
     </div>
 
-    <div class="proposal-container" id="conteudo-proposta">
-        
-        <header class="bg-[#0B0E14] text-white p-10 flex justify-between items-center border-b-4 border-[#0082CD]">
-            <div>
-                <div class="text-3xl flex items-center gap-1" style="font-family: 'Arial Black', sans-serif; letter-spacing: -1px;">
-                    KYNTO<span class="text-[#0082CD] text-5xl leading-none" style="margin-top: -8px;">.</span>
+    <div class="proposal-container mt-20" id="conteudo-global-proposta">
+        <div id="html-da-proposta">
+            <header class="bg-kynto-dark text-white p-10 flex justify-between items-center border-b-4 border-kynto-blue" style="background-color: #0B0E14; color: white;">
+                <div>
+                    <div class="text-3xl flex items-center gap-1" style="font-family: 'Arial Black', sans-serif; letter-spacing: -1px; font-weight: bold;">
+                        KYNTO<span class="text-kynto-blue text-5xl leading-none" style="color: #0082CD; margin-top: -8px;">.</span>
+                    </div>
+                    <p class="text-slate-400 mt-1 text-sm font-medium">Soluções em Tecnologia da Informação</p>
                 </div>
-                <p class="text-slate-400 mt-1 text-sm font-medium">Soluções em Tecnologia da Informação</p>
-            </div>
-            <div class="text-right">
-                <h1 class="text-2xl font-bold" style="font-family: 'Space Grotesk', sans-serif;">PROPOSTA COMERCIAL</h1>
-                <p class="text-[#0082CD] font-semibold mt-1">Ref: <span contenteditable="true" id="prop-ref">#KYN-2601</span></p>
-                <p class="text-slate-400 text-sm mt-1" contenteditable="true">Data: 27 de Fevereiro de 2026</p>
-            </div>
-        </header>
+                <div class="text-right">
+                    <h1 class="text-2xl font-display font-bold text-white">PROPOSTA COMERCIAL</h1>
+                    <p class="text-kynto-blue font-semibold mt-1" style="color: #0082CD;">Ref: <span contenteditable="true">#KYN-[MUDAR]</span></p>
+                    <p class="text-slate-400 text-sm mt-1" contenteditable="true">Data: [DIA] de [MÊS] de 2026</p>
+                </div>
+            </header>
 
-        <div class="p-10 bg-slate-50 border-b border-slate-200 flex justify-between gap-8">
-            <div class="flex-1">
-                <p class="text-xs font-bold text-slate-400 uppercase mb-2">Preparado para:</p>
-                <h2 class="text-xl font-bold text-slate-800" contenteditable="true">[NOME DA EMPRESA CLIENTE]</h2>
-                <p class="text-slate-600 mt-1" contenteditable="true">A/C: [Nome do Responsável]</p>
-                <p class="text-slate-600" contenteditable="true">[Endereço, Osasco - SP]</p>
+            <div class="p-10 bg-slate-50 border-b border-slate-200 flex justify-between gap-8">
+                <div class="flex-1">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Preparado para:</p>
+                    <h2 class="text-xl font-bold text-slate-800" contenteditable="true">[NOME DA EMPRESA CLIENTE]</h2>
+                    <p class="text-slate-600 mt-1" contenteditable="true">A/C: [Nome do Responsável]</p>
+                    <p class="text-slate-600" contenteditable="true">[Endereço da Empresa, Osasco - SP]</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Preparado por:</p>
+                    <h2 class="text-xl font-bold text-slate-800">Bruno Dal'Olio Santos</h2>
+                    <p class="text-slate-600 mt-1">Responsável Técnico</p>
+                    <p class="text-slate-600">comercial@kynto.com.br</p>
+                    <p class="text-slate-600">(11) 91517-0436</p>
+                </div>
             </div>
-            <div class="text-right">
-                <p class="text-xs font-bold text-slate-400 uppercase mb-2">Preparado por:</p>
-                <h2 class="text-xl font-bold text-slate-800">Bruno Dal'Olio Santos</h2>
-                <p class="text-slate-600 mt-1">Responsável Técnico</p>
-                <p class="text-slate-600">comercial@kynto.com.br</p>
-                <p class="text-slate-600">(11) 91517-0436</p>
+
+            <div class="p-10">
+                <section class="mb-10">
+                    <h3 class="text-lg font-bold text-kynto-dark border-b-2 border-kynto-blue pb-2 mb-4 inline-block" style="color: #0B0E14; border-bottom: 2px solid #0082CD;">1. Apresentação</h3>
+                    <div contenteditable="true" class="text-slate-600 leading-relaxed space-y-4">
+                        <p>Olá, <strong>[Nome do Cliente]</strong>.</p>
+                        <p>Agradecemos a oportunidade de apresentar esta proposta técnica e comercial. A <strong>KYNTO</strong> atua com foco em garantir que a infraestrutura tecnológica da sua empresa funcione com máxima performance, segurança e estabilidade.</p>
+                        <p>Com base em nossa conversa, elaboramos o escopo abaixo focado em resolver seus desafios atuais de forma rápida e definitiva.</p>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <div class="flex justify-between items-end mb-4 border-b-2 border-kynto-blue pb-2" style="border-bottom: 2px solid #0082CD;">
+                        <h3 class="text-lg font-bold text-kynto-dark m-0" style="color: #0B0E14;">2. Escopo dos Serviços</h3>
+                        <button onclick="adicionarEscopo()" class="btn-admin no-print text-sm text-blue-600 hover:underline font-bold">+ Adicionar Tópico</button>
+                    </div>
+                    <p class="text-slate-600 mb-6" contenteditable="true">Propomos a execução dos seguintes serviços e fornecimento de materiais:</p>
+                    
+                    <div id="lista-escopo" class="grid gap-4">
+                        <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100 relative group">
+                            <div class="mt-1 text-kynto-blue" style="color: #0082CD;"><i class="ph-fill ph-check-circle text-xl"></i></div>
+                            <div class="w-full">
+                                <h4 class="font-bold text-slate-800" contenteditable="true">Upgrade de Performance</h4>
+                                <p class="text-sm text-slate-600 mt-1" contenteditable="true">Descrição do serviço a ser realizado...</p>
+                            </div>
+                            <button onclick="this.parentElement.remove()" class="btn-admin no-print absolute top-4 right-4 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="ph-bold ph-trash"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <div class="flex justify-between items-end mb-6 border-b-2 border-kynto-blue pb-2" style="border-bottom: 2px solid #0082CD;">
+                        <h3 class="text-lg font-bold text-kynto-dark m-0" style="color: #0B0E14;">3. Investimento</h3>
+                        <button onclick="adicionarLinhaTabela()" class="no-print btn-admin text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded font-semibold flex items-center gap-1">
+                            <i class="ph-bold ph-plus"></i> Adicionar Item
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-hidden rounded-lg border border-slate-200">
+                        <table class="w-full text-left border-collapse" id="tabela-orcamento" border="1" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-800" style="background-color: #f1f5f9;">
+                                    <th class="py-3 px-4 font-bold border-b border-slate-200" style="border: 1px solid #cbd5e1; padding: 10px;">Descrição</th>
+                                    <th class="py-3 px-4 font-bold border-b border-slate-200 text-center w-20" style="border: 1px solid #cbd5e1; padding: 10px;">Qtd</th>
+                                    <th class="py-3 px-4 font-bold border-b border-slate-200 text-right w-32" style="border: 1px solid #cbd5e1; padding: 10px;">V. Unit.</th>
+                                    <th class="py-3 px-4 font-bold border-b border-slate-200 text-right w-32" style="border: 1px solid #cbd5e1; padding: 10px;">Total</th>
+                                    <th class="w-10 no-print btn-admin border-b border-slate-200"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-600 text-sm" id="tbody-orcamento">
+                                <tr class="border-b border-slate-100 hover:bg-slate-50 group">
+                                    <td class="py-3 px-4" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px;">Serviço / Produto Inicial</td>
+                                    <td class="py-3 px-4 text-center" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center;">1</td>
+                                    <td class="py-3 px-4 text-right" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                                    <td class="py-3 px-4 text-right font-medium" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                                    <td class="text-center no-print btn-admin px-2" style="border: 1px solid #cbd5e1;"><button onclick="removerLinha(this)" class="btn-remove-row text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-slate-50 border-t-2 border-slate-200">
+                                    <td colspan="3" class="py-4 px-4 text-right font-bold text-slate-800" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">TOTAL DO INVESTIMENTO:</td>
+                                    <td class="py-4 px-4 text-right font-bold text-kynto-blue text-lg" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right; color: #0082CD;">R$ 0,00</td>
+                                    <td class="no-print btn-admin" style="border: 1px solid #cbd5e1;"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h3 class="text-lg font-bold text-kynto-dark border-b-2 border-kynto-blue pb-2 mb-4 inline-block" style="color: #0B0E14; border-bottom: 2px solid #0082CD;">4. Condições Gerais</h3>
+                    <ul class="list-disc pl-5 text-slate-600 space-y-2 text-sm" contenteditable="true">
+                        <li><strong>Forma de Pagamento:</strong> 50% na aprovação da proposta e 50% na conclusão. Via PIX ou Cartão (com taxa da operadora).</li>
+                        <li><strong>Prazo de Execução:</strong> Até 2 dias úteis após o aceite e recebimento de eventuais peças.</li>
+                        <li><strong>Garantia:</strong> 90 dias de garantia sobre o serviço técnico prestado.</li>
+                        <li><strong>Validade:</strong> Esta proposta é válida por 5 dias corridos.</li>
+                    </ul>
+                </section>
             </div>
         </div>
 
-        <div class="p-10">
-            <section class="mb-10">
-                <div class="flex justify-between items-end mb-4 border-b-2 border-[#0082CD] pb-2">
-                    <h3 class="text-lg font-bold text-[#0B0E14] m-0">Escopo dos Serviços</h3>
-                    <button onclick="addEscopo()" class="btn-admin text-sm text-blue-600 hover:underline font-bold">+ Adicionar Tópico</button>
-                </div>
-                
-                <div id="lista-escopo" class="grid gap-4">
-                    <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100 group relative">
-                        <div class="mt-1 text-[#0082CD]"><i class="ph-fill ph-check-circle text-xl"></i></div>
-                        <div class="w-full">
-                            <h4 class="font-bold text-slate-800" contenteditable="true">Upgrade de Performance (SSD)</h4>
-                            <p class="text-sm text-slate-600 mt-1" contenteditable="true">Substituição do HD antigo por SSD NVMe 480GB com formatação limpa e backup.</p>
-                        </div>
-                        <button onclick="this.parentElement.remove()" class="btn-admin absolute top-4 right-4 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="ph-bold ph-trash"></i></button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="mb-10">
-                <div class="flex justify-between items-end mb-4 border-b-2 border-[#0082CD] pb-2">
-                    <h3 class="text-lg font-bold text-[#0B0E14] m-0">Investimento</h3>
-                    <button onclick="addLinha()" class="btn-admin text-sm text-blue-600 hover:underline font-bold">+ Adicionar Item</button>
-                </div>
-                
-                <div class="overflow-hidden rounded-lg border border-slate-200">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-800">
-                                <th class="py-3 px-4 font-bold border-b border-slate-200">Descrição</th>
-                                <th class="py-3 px-4 font-bold border-b border-slate-200 text-center w-16">Qtd</th>
-                                <th class="py-3 px-4 font-bold border-b border-slate-200 text-right w-32">V. Unit.</th>
-                                <th class="py-3 px-4 font-bold border-b border-slate-200 text-right w-32">Total</th>
-                                <th class="w-10 no-print btn-admin border-b border-slate-200"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-slate-600 text-sm" id="tbody-orcamento">
-                            <tr class="border-b border-slate-100 hover:bg-slate-50 group">
-                                <td class="py-3 px-4" contenteditable="true">SSD NVMe 480GB + Mão de obra</td>
-                                <td class="py-3 px-4 text-center" contenteditable="true">3</td>
-                                <td class="py-3 px-4 text-right" contenteditable="true">R$ 350,00</td>
-                                <td class="py-3 px-4 text-right font-medium" contenteditable="true">R$ 1.050,00</td>
-                                <td class="text-center no-print btn-admin"><button onclick="this.parentElement.parentElement.remove()" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="ph-bold ph-trash"></i></button></td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr class="bg-slate-50 border-t-2 border-slate-200">
-                                <td colspan="3" class="py-4 px-4 text-right font-bold text-slate-800">TOTAL DO INVESTIMENTO:</td>
-                                <td class="py-4 px-4 text-right font-bold text-[#0082CD] text-lg" contenteditable="true">R$ 1.050,00</td>
-                                <td class="no-print btn-admin"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </section>
-
-            <section id="area-assinatura" class="mt-16 pt-10 border-t border-slate-200 hidden">
+        <div class="p-10 pt-0">
+            <section id="area-assinatura" class="mt-8 pt-8 border-t border-slate-200 hidden">
                 <div class="bg-green-50 border border-green-200 p-6 rounded-lg flex items-start gap-4">
                     <div class="text-green-600 mt-1"><i class="ph-fill ph-seal-check text-4xl"></i></div>
                     <div>
                         <h4 class="font-bold text-green-800 text-lg">Proposta Aceita Digitalmente</h4>
-                        <p class="text-sm text-green-700 mt-1">Por: <strong id="ass-nome">---</strong></p>
+                        <p class="text-sm text-green-700 mt-1">Aceito por: <strong id="ass-nome">---</strong></p>
                         <p class="text-sm text-green-700">Data e Hora: <strong id="ass-data">---</strong></p>
                         <p class="text-sm text-green-700">IP de Origem: <strong id="ass-ip">---</strong></p>
                         <div class="mt-3 p-2 bg-green-100 rounded text-xs font-mono text-green-800 border border-green-200 break-all">
@@ -150,21 +216,27 @@
                     </div>
                 </div>
             </section>
-
         </div>
+        
+        <footer class="bg-slate-800 text-slate-400 text-center py-6 text-xs" style="background-color: #1e293b; color: #94a3b8; text-align: center; padding: 20px;">
+            <p><strong>KYNTO Soluções em Tecnologia da Informação</strong></p>
+            <p>Atendimento Especializado em Osasco e Região - SP</p>
+            <p>www.kynto.com.br | Contato: (11) 91517-0436</p>
+        </footer>
+
     </div>
 
-    <div id="modal-assinatura" class="fixed inset-0 z-50 flex items-center justify-center">
-        <div class="bg-white p-8 rounded-xl max-w-md w-full shadow-2xl relative">
+    <div id="modal-assinatura" class="fixed inset-0 z-50 items-center justify-center hidden" style="background: rgba(11, 14, 20, 0.8); backdrop-filter: blur(4px);">
+        <div class="bg-white p-8 rounded-xl max-w-md w-full shadow-2xl relative m-4">
             <h2 class="text-2xl font-bold text-slate-800 mb-2">Aceite de Proposta</h2>
-            <p class="text-slate-600 mb-6 text-sm">Ao clicar em confirmar, você aprova as condições desta proposta e autoriza o início dos serviços.</p>
+            <p class="text-slate-600 mb-6 text-sm">Ao clicar em confirmar, você aprova as condições desta proposta e autoriza o início dos serviços da KYNTO.</p>
             
             <label class="block text-sm font-bold text-slate-700 mb-1">Seu Nome Completo</label>
             <input type="text" id="input-nome-aceite" class="w-full p-3 border border-slate-300 rounded focus:border-[#0082CD] focus:outline-none mb-6" placeholder="Ex: João da Silva">
             
             <div class="flex gap-3 justify-end">
                 <button onclick="fecharModal()" class="px-5 py-2 text-slate-600 hover:bg-slate-100 rounded font-bold transition">Cancelar</button>
-                <button onclick="assinarProposta()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded font-bold shadow transition flex items-center gap-2">
+                <button onclick="enviarAceiteAPI()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded font-bold shadow transition flex items-center gap-2">
                     <i class="ph-bold ph-check"></i> Confirmar Aceite
                 </button>
             </div>
@@ -172,88 +244,221 @@
     </div>
 
     <script>
-        // Função para simular Bruno Gerando o Link
-        function salvarNoBanco() {
-            // Aqui futuramente vai o fetch() enviando o JSON pro Cloudflare Worker
-            alert("Em produção, isso salvará no Cloudflare D1 e gerará um link curto (ex: kynto.com.br/p/x8f2) para enviar ao cliente.");
-            
-            // SIMULAÇÃO: Muda a tela para o modo de visão do cliente
+        // 1. INICIALIZAÇÃO: Verifica se é o Admin criando ou o Cliente visualizando
+        window.onload = async function() {
+            const params = new URLSearchParams(window.location.search);
+            const idProposta = params.get('id');
+
+            if (idProposta) {
+                // MODO CLIENTE: Carrega dados da API
+                prepararModoCliente();
+                await carregarProposta(idProposta);
+            }
+        }
+
+        function prepararModoCliente() {
             document.getElementById('body-app').classList.remove('modo-edicao');
             document.getElementById('body-app').classList.add('modo-cliente');
             document.getElementById('controles-cliente').classList.remove('hidden');
             document.getElementById('controles-cliente').classList.add('flex');
-            window.scrollTo(0,0);
+            
+            // Tira os avisos de edição do topo
+            const avisoAdmin = document.getElementById('aviso-admin');
+            if(avisoAdmin) avisoAdmin.remove();
         }
 
-        // Funções da Tabela Admin
-        function addEscopo() {
+        // 2. FUNÇÕES DE EDIÇÃO (Admin)
+        function adicionarEscopo() {
             const lista = document.getElementById('lista-escopo');
             lista.insertAdjacentHTML('beforeend', `
-                <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100 group relative">
-                    <div class="mt-1 text-[#0082CD]"><i class="ph-fill ph-check-circle text-xl"></i></div>
+                <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100 relative group">
+                    <div class="mt-1 text-kynto-blue" style="color: #0082CD;"><i class="ph-fill ph-check-circle text-xl"></i></div>
                     <div class="w-full">
                         <h4 class="font-bold text-slate-800" contenteditable="true">Novo Serviço</h4>
-                        <p class="text-sm text-slate-600 mt-1" contenteditable="true">Descrição detalhada do serviço...</p>
+                        <p class="text-sm text-slate-600 mt-1" contenteditable="true">Descreva o serviço...</p>
                     </div>
-                    <button onclick="this.parentElement.remove()" class="btn-admin absolute top-4 right-4 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="ph-bold ph-trash"></i></button>
+                    <button onclick="this.parentElement.remove()" class="btn-admin no-print absolute top-4 right-4 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="ph-bold ph-trash"></i></button>
                 </div>
             `);
         }
 
-        function addLinha() {
+        function adicionarLinhaTabela() {
             const tbody = document.getElementById('tbody-orcamento');
             tbody.insertAdjacentHTML('beforeend', `
                 <tr class="border-b border-slate-100 hover:bg-slate-50 group">
-                    <td class="py-3 px-4" contenteditable="true">Novo Item</td>
-                    <td class="py-3 px-4 text-center" contenteditable="true">1</td>
-                    <td class="py-3 px-4 text-right" contenteditable="true">R$ 0,00</td>
-                    <td class="py-3 px-4 text-right font-medium" contenteditable="true">R$ 0,00</td>
-                    <td class="text-center no-print btn-admin"><button onclick="this.parentElement.parentElement.remove()" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="ph-bold ph-trash"></i></button></td>
+                    <td class="py-3 px-4" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px;">Novo Item</td>
+                    <td class="py-3 px-4 text-center" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center;">1</td>
+                    <td class="py-3 px-4 text-right" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                    <td class="py-3 px-4 text-right font-medium" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                    <td class="text-center no-print btn-admin px-2" style="border: 1px solid #cbd5e1;"><button onclick="removerLinha(this)" class="btn-remove-row text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button></td>
                 </tr>
             `);
         }
 
-        // ====== FUNÇÕES DO MODO CLIENTE ====== //
-        function abrirModalAssinatura() {
-            document.getElementById('modal-assinatura').style.display = 'flex';
-        }
-        
-        function fecharModal() {
-            document.getElementById('modal-assinatura').style.display = 'none';
+        function removerLinha(botao) { botao.closest('tr').remove(); }
+
+        // 3. API: SALVAR PROPOSTA NO BANCO (Admin)
+        async function salvarPropostaAPI() {
+            // Clona o HTML interno para não quebrar a tela do admin
+            const divHtml = document.getElementById('html-da-proposta').cloneNode(true);
+            
+            // Limpa coisas de administrador antes de salvar no banco para o cliente
+            const btnAdmins = divHtml.querySelectorAll('.btn-admin');
+            btnAdmins.forEach(b => b.remove());
+            
+            const editables = divHtml.querySelectorAll('[contenteditable]');
+            editables.forEach(el => el.removeAttribute('contenteditable'));
+
+            const htmlFinal = divHtml.innerHTML;
+            
+            document.getElementById('loader').style.display = 'flex';
+
+            try {
+                const resposta = await fetch('/api/salvar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ conteudo_html: htmlFinal })
+                });
+
+                const dados = await resposta.json();
+                document.getElementById('loader').style.display = 'none';
+
+                if(dados.success) {
+                    const link = window.location.origin + window.location.pathname + '?id=' + dados.id;
+                    // Usa prompt para ficar fácil do Bruno copiar o link no PC
+                    prompt("Proposta salva no sistema!\nCopie o link abaixo e envie para o cliente:", link);
+                } else {
+                    alert("Erro ao salvar: " + (dados.error || "Erro desconhecido"));
+                }
+            } catch (err) {
+                document.getElementById('loader').style.display = 'none';
+                // Fallback para caso teste localmente sem o Worker rodando
+                alert("Modo Local / Sem Conexão Cloudflare. Se estiver rodando do seu PC, o banco de dados não está conectado. Suba para o GitHub Pages.");
+                console.log(err);
+            }
         }
 
-        function assinarProposta() {
+        // 4. API: LER PROPOSTA (Cliente)
+        async function carregarProposta(id) {
+            document.getElementById('loader').style.display = 'flex';
+            
+            try {
+                const resposta = await fetch(`/api/ler?id=${id}`);
+                const dados = await resposta.json();
+                
+                document.getElementById('loader').style.display = 'none';
+
+                if(dados.error) {
+                    document.getElementById('html-da-proposta').innerHTML = `<h2 class="text-center text-red-500 py-20 font-bold">Proposta não encontrada ou expirada.</h2>`;
+                    document.getElementById('controles-cliente').classList.add('hidden');
+                    return;
+                }
+
+                // Injeta o HTML salvo no banco
+                document.getElementById('html-da-proposta').innerHTML = dados.conteudo_html;
+
+                // Verifica se já está assinada
+                if(dados.status === 'aceito') {
+                    mostrarSelo(dados);
+                }
+
+            } catch (err) {
+                document.getElementById('loader').style.display = 'none';
+                console.error(err);
+            }
+        }
+
+        // 5. API: ACEITAR PROPOSTA (Cliente)
+        function abrirModalAssinatura() { document.getElementById('modal-assinatura').style.display = 'flex'; }
+        function fecharModal() { document.getElementById('modal-assinatura').style.display = 'none'; }
+
+        async function enviarAceiteAPI() {
             const nome = document.getElementById('input-nome-aceite').value;
-            if(!nome) { alert("Por favor, informe seu nome para assinar."); return; }
+            if(!nome) { alert("Por favor, digite seu nome completo para assinar."); return; }
 
-            // Fecha Modal
+            const idProposta = new URLSearchParams(window.location.search).get('id');
+            if(!idProposta) { alert("Erro: ID da proposta perdido."); return; }
+
             fecharModal();
+            document.getElementById('loader').style.display = 'flex';
 
-            // Pega Data Atual
-            const dataAtual = new Date().toLocaleString('pt-BR');
+            try {
+                const resposta = await fetch('/api/aceitar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: idProposta, nome_cliente: nome })
+                });
+
+                const dados = await resposta.json();
+                document.getElementById('loader').style.display = 'none';
+
+                if(dados.success) {
+                    // Prepara dados falsos para preencher a view (o banco já salvou de verdade)
+                    dados.nome_cliente = nome;
+                    mostrarSelo(dados);
+                    alert("Obrigado! Proposta aceita com sucesso.");
+                } else {
+                    alert("Erro ao processar assinatura.");
+                }
+            } catch (err) {
+                document.getElementById('loader').style.display = 'none';
+                console.error(err);
+            }
+        }
+
+        function mostrarSelo(dados) {
+            document.getElementById('ass-nome').innerText = dados.nome_cliente;
+            document.getElementById('ass-data').innerText = dados.data_aceite;
+            document.getElementById('ass-ip').innerText = dados.ip_cliente;
+            document.getElementById('ass-hash').innerText = dados.hash_validador;
             
-            // Simula captura de IP (Em prod, vem da API do Cloudflare `request.headers.get("CF-Connecting-IP")`)
-            const ipSimulado = "177." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + ".42";
-
-            // Gera Hash único falso (Validador)
-            const hash = "KYN-" + btoa(nome + dataAtual).substring(0, 16).toUpperCase();
-
-            // Preenche o Selo de Assinatura
-            document.getElementById('ass-nome').innerText = nome;
-            document.getElementById('ass-data').innerText = dataAtual;
-            document.getElementById('ass-ip').innerText = ipSimulado;
-            document.getElementById('ass-hash').innerText = hash;
-
-            // Mostra o Selo e oculta o botão de aceitar
             document.getElementById('area-assinatura').classList.remove('hidden');
-            document.getElementById('btn-aceitar').classList.add('hidden');
             
-            // Mostra botão de baixar PDF
+            const btnAceitar = document.getElementById('btn-aceitar');
+            if(btnAceitar) btnAceitar.classList.add('hidden');
+            
             document.getElementById('btn-baixar-pdf').classList.remove('hidden');
             document.getElementById('btn-baixar-pdf').classList.add('flex');
+        }
 
-            // Aqui futuramente fará um fetch() PUT na API para mudar o Status no banco D1 para "Aceito".
-            alert("Pronto! Proposta aceita. O selo foi gerado no rodapé do documento.");
+        // ==========================================
+        // SCRIPT LOCAL: Exportar para MS Word (.doc)
+        // ==========================================
+        function exportHTMLtoWord(filename) {
+            const clone = document.getElementById('conteudo-global-proposta').cloneNode(true);
+            const noPrintElements = clone.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.remove());
+            const editables = clone.querySelectorAll('[contenteditable]');
+            editables.forEach(el => el.removeAttribute('contenteditable'));
+            const icons = clone.querySelectorAll('i');
+            icons.forEach(el => el.remove());
+
+            const content = clone.innerHTML;
+            const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            <head><meta charset='utf-8'><title>Proposta KYNTO</title>
+            <style>
+                body { font-family: 'Segoe UI', Arial, sans-serif; color: #333333; font-size: 11pt; line-height: 1.5; }
+                header { background-color: #0B0E14 !important; color: white !important; padding: 20px; border-bottom: 4px solid #0082CD; }
+                header * { color: white !important; }
+                h1 { font-size: 18pt; margin-bottom: 5px; } h2 { font-size: 14pt; color: #0B0E14; margin-bottom: 5px; }
+                h3 { font-size: 12pt; color: #0B0E14; border-bottom: 2px solid #0082CD; padding-bottom: 5px; margin-top: 20px;}
+                h4 { font-size: 11pt; color: #0082CD; margin-bottom: 2px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
+                th, td { border: 1px solid #dddddd; padding: 10px; text-align: left; }
+                th { background-color: #f8fafc; font-weight: bold; }
+                .text-right { text-align: right !important; } .text-center { text-align: center !important; }
+                .text-kynto-blue { color: #0082CD !important; font-weight: bold;}
+                .bg-slate-50 { background-color: #f8fafc; padding: 15px; margin-bottom: 10px; border: 1px solid #eeeeee; }
+            </style></head><body>`;
+            
+            const html = preHtml + content + "</body></html>";
+            const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename + '.doc';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
