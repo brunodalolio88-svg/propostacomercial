@@ -23,7 +23,7 @@
     </script>
 
     <style>
-        body { background-color: #f1f5f9; color: #334155; }
+        body { background-color: #f1f5f9; color: #334155; font-family: 'Inter', sans-serif;}
         .proposal-container {
             max-width: 900px; margin: 40px auto; background: #ffffff;
             border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden;
@@ -54,7 +54,6 @@
             [contenteditable="true"] { padding: 0; margin: 0; box-shadow: none !important; background: transparent !important; }
         }
 
-        /* Loader Modal */
         #loader { display: none; background: rgba(255, 255, 255, 0.9); z-index: 9999; }
     </style>
 </head>
@@ -65,7 +64,7 @@
     </div>
 
     <div id="aviso-admin" class="fixed top-0 left-0 w-full bg-blue-100 text-blue-800 text-center py-2 text-sm font-bold no-print z-50 shadow-md btn-admin">
-        <i class="ph-fill ph-info"></i> MODO CRIAÇÃO: Edite a proposta e clique em "Gerar Link P/ Cliente" para salvar no sistema.
+        <i class="ph-fill ph-info"></i> MODO CRIAÇÃO: Digite os valores (ex: 350.50) e clique fora para virar R$. O total calcula sozinho.
     </div>
 
     <div id="controles-admin" class="fixed top-14 right-6 flex flex-col gap-3 no-print z-40 btn-admin">
@@ -100,8 +99,8 @@
                 </div>
                 <div class="text-right">
                     <h1 class="text-2xl font-display font-bold text-white">PROPOSTA COMERCIAL</h1>
-                    <p class="text-kynto-blue font-semibold mt-1" style="color: #0082CD;">Ref: <span contenteditable="true">#KYN-[MUDAR]</span></p>
-                    <p class="text-slate-400 text-sm mt-1" contenteditable="true">Data: [DIA] de [MÊS] de 2026</p>
+                    <p class="text-kynto-blue font-semibold mt-1" style="color: #0082CD;">Ref: <span contenteditable="true" id="prop-ref">#KYN-0000</span></p>
+                    <p class="text-slate-400 text-sm mt-1" contenteditable="true" id="prop-data">Data: ---</p>
                 </div>
             </header>
 
@@ -171,17 +170,17 @@
                             </thead>
                             <tbody class="text-slate-600 text-sm" id="tbody-orcamento">
                                 <tr class="border-b border-slate-100 hover:bg-slate-50 group">
-                                    <td class="py-3 px-4" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px;">Serviço / Produto Inicial</td>
-                                    <td class="py-3 px-4 text-center" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center;">1</td>
-                                    <td class="py-3 px-4 text-right" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
-                                    <td class="py-3 px-4 text-right font-medium" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                                    <td class="py-3 px-4" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px;">Manutenção Inicial</td>
+                                    <td class="py-3 px-4 text-center calc-qtd" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center;">1</td>
+                                    <td class="py-3 px-4 text-right calc-valor" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                                    <td class="py-3 px-4 text-right font-medium calc-total-linha" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
                                     <td class="text-center no-print btn-admin px-2" style="border: 1px solid #cbd5e1;"><button onclick="removerLinha(this)" class="btn-remove-row text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button></td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr class="bg-slate-50 border-t-2 border-slate-200">
                                     <td colspan="3" class="py-4 px-4 text-right font-bold text-slate-800" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">TOTAL DO INVESTIMENTO:</td>
-                                    <td class="py-4 px-4 text-right font-bold text-kynto-blue text-lg" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right; color: #0082CD;">R$ 0,00</td>
+                                    <td class="py-4 px-4 text-right font-bold text-kynto-blue text-lg" id="calc-total-geral" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right; color: #0082CD;">R$ 0,00</td>
                                     <td class="no-print btn-admin" style="border: 1px solid #cbd5e1;"></td>
                                 </tr>
                             </tfoot>
@@ -192,8 +191,8 @@
                 <section class="mb-10">
                     <h3 class="text-lg font-bold text-kynto-dark border-b-2 border-kynto-blue pb-2 mb-4 inline-block" style="color: #0B0E14; border-bottom: 2px solid #0082CD;">4. Condições Gerais</h3>
                     <ul class="list-disc pl-5 text-slate-600 space-y-2 text-sm" contenteditable="true">
-                        <li><strong>Forma de Pagamento:</strong> 50% na aprovação da proposta e 50% na conclusão. Via PIX ou Cartão (com taxa da operadora).</li>
-                        <li><strong>Prazo de Execução:</strong> Até 2 dias úteis após o aceite e recebimento de eventuais peças.</li>
+                        <li><strong>Forma de Pagamento:</strong> 50% na aprovação da proposta e 50% na conclusão. Via PIX ou Cartão.</li>
+                        <li><strong>Prazo de Execução:</strong> Até 2 dias úteis após o aceite.</li>
                         <li><strong>Garantia:</strong> 90 dias de garantia sobre o serviço técnico prestado.</li>
                         <li><strong>Validade:</strong> Esta proposta é válida por 5 dias corridos.</li>
                     </ul>
@@ -223,7 +222,6 @@
             <p>Atendimento Especializado em Osasco e Região - SP</p>
             <p>www.kynto.com.br | Contato: (11) 91517-0436</p>
         </footer>
-
     </div>
 
     <div id="modal-assinatura" class="fixed inset-0 z-50 items-center justify-center hidden" style="background: rgba(11, 14, 20, 0.8); backdrop-filter: blur(4px);">
@@ -244,30 +242,109 @@
     </div>
 
     <script>
-        // 1. INICIALIZAÇÃO: Verifica se é o Admin criando ou o Cliente visualizando
+        // ==========================================
+        // 1. DATA E REFERÊNCIA AUTOMÁTICAS
+        // ==========================================
         window.onload = async function() {
             const params = new URLSearchParams(window.location.search);
             const idProposta = params.get('id');
 
             if (idProposta) {
-                // MODO CLIENTE: Carrega dados da API
                 prepararModoCliente();
                 await carregarProposta(idProposta);
+            } else {
+                // Modo Admin: Preencher Data de Hoje e Número Ref
+                const data = new Date();
+                const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+                document.getElementById('prop-data').innerText = `Data: ${data.getDate()} de ${meses[data.getMonth()]} de ${data.getFullYear()}`;
+                
+                // Gera o código do Orçamento: AnoMêsDia-Codigo (Ex: #KYN-20260227-8A2)
+                const diaFormatado = String(data.getDate()).padStart(2, '0');
+                const mesFormatado = String(data.getMonth() + 1).padStart(2, '0');
+                const codeAleatorio = Math.random().toString(36).substring(2, 5).toUpperCase();
+                document.getElementById('prop-ref').innerText = `#KYN-${data.getFullYear()}${mesFormatado}${diaFormatado}-${codeAleatorio}`;
             }
         }
 
-        function prepararModoCliente() {
-            document.getElementById('body-app').classList.remove('modo-edicao');
-            document.getElementById('body-app').classList.add('modo-cliente');
-            document.getElementById('controles-cliente').classList.remove('hidden');
-            document.getElementById('controles-cliente').classList.add('flex');
-            
-            // Tira os avisos de edição do topo
-            const avisoAdmin = document.getElementById('aviso-admin');
-            if(avisoAdmin) avisoAdmin.remove();
+        // ==========================================
+        // 2. CÁLCULO E MÁSCARA AUTOMÁTICA DA TABELA
+        // ==========================================
+        
+        // Transforma "R$ 1.050,50" em número (1050.50)
+        function parseMoeda(str) {
+            if(!str) return 0;
+            // Remove R$, espaços, pontos e troca vírgula por ponto
+            let val = parseFloat(str.replace(/[R$\s\.]/g, '').replace(',', '.'));
+            return isNaN(val) ? 0 : val;
         }
 
-        // 2. FUNÇÕES DE EDIÇÃO (Admin)
+        // Transforma número (1050.5) em "R$ 1.050,50"
+        function formataMoeda(num) {
+            return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Calcula o total da tabela
+        function recalcularTabela() {
+            const linhas = document.querySelectorAll('#tbody-orcamento tr');
+            let totalGeral = 0;
+
+            linhas.forEach(linha => {
+                const qtdEl = linha.querySelector('.calc-qtd');
+                const valorEl = linha.querySelector('.calc-valor');
+                const totalLinhaEl = linha.querySelector('.calc-total-linha');
+
+                if (qtdEl && valorEl && totalLinhaEl) {
+                    const qtd = parseFloat(qtdEl.innerText) || 0;
+                    const valor = parseMoeda(valorEl.innerText);
+                    const subtotal = qtd * valor;
+
+                    // Atualiza total da linha visualmente
+                    totalLinhaEl.innerText = formataMoeda(subtotal);
+                    totalGeral += subtotal;
+                }
+            });
+
+            // Atualiza total geral
+            document.getElementById('calc-total-geral').innerText = formataMoeda(totalGeral);
+        }
+
+        // Escuta quando usuário digita na tabela para recalcular na hora
+        document.getElementById('tabela-orcamento').addEventListener('input', function(e) {
+            if (e.target.classList.contains('calc-qtd') || e.target.classList.contains('calc-valor')) {
+                recalcularTabela();
+            }
+        });
+
+        // Aplica a máscara R$ quando o usuário clica fora do campo de valor
+        document.getElementById('tabela-orcamento').addEventListener('focusout', function(e) {
+            if (e.target.classList.contains('calc-valor')) {
+                let valor = parseMoeda(e.target.innerText);
+                e.target.innerText = formataMoeda(valor);
+                recalcularTabela();
+            }
+        });
+
+        // Adicionar Linha com as classes certas
+        function adicionarLinhaTabela() {
+            const tbody = document.getElementById('tbody-orcamento');
+            const novaLinha = document.createElement('tr');
+            novaLinha.className = "border-b border-slate-100 hover:bg-slate-50 group";
+            novaLinha.innerHTML = `
+                <td class="py-3 px-4" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px;">Novo Produto/Serviço</td>
+                <td class="py-3 px-4 text-center calc-qtd" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center;">1</td>
+                <td class="py-3 px-4 text-right calc-valor" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                <td class="py-3 px-4 text-right font-medium calc-total-linha" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
+                <td class="text-center no-print btn-admin px-2" style="border: 1px solid #cbd5e1;"><button onclick="removerLinha(this)" class="btn-remove-row text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button></td>
+            `;
+            tbody.appendChild(novaLinha);
+            recalcularTabela();
+        }
+
+        function removerLinha(botao) { 
+            botao.closest('tr').remove(); 
+            recalcularTabela();
+        }
+
         function adicionarEscopo() {
             const lista = document.getElementById('lista-escopo');
             lista.insertAdjacentHTML('beforeend', `
@@ -282,35 +359,26 @@
             `);
         }
 
-        function adicionarLinhaTabela() {
-            const tbody = document.getElementById('tbody-orcamento');
-            tbody.insertAdjacentHTML('beforeend', `
-                <tr class="border-b border-slate-100 hover:bg-slate-50 group">
-                    <td class="py-3 px-4" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px;">Novo Item</td>
-                    <td class="py-3 px-4 text-center" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center;">1</td>
-                    <td class="py-3 px-4 text-right" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
-                    <td class="py-3 px-4 text-right font-medium" contenteditable="true" style="border: 1px solid #cbd5e1; padding: 10px; text-align: right;">R$ 0,00</td>
-                    <td class="text-center no-print btn-admin px-2" style="border: 1px solid #cbd5e1;"><button onclick="removerLinha(this)" class="btn-remove-row text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button></td>
-                </tr>
-            `);
+        // ==========================================
+        // 3. API - CLOUDFLARE E MODO CLIENTE
+        // ==========================================
+        function prepararModoCliente() {
+            document.getElementById('body-app').classList.remove('modo-edicao');
+            document.getElementById('body-app').classList.add('modo-cliente');
+            document.getElementById('controles-cliente').classList.remove('hidden');
+            document.getElementById('controles-cliente').classList.add('flex');
+            const avisoAdmin = document.getElementById('aviso-admin');
+            if(avisoAdmin) avisoAdmin.remove();
         }
 
-        function removerLinha(botao) { botao.closest('tr').remove(); }
-
-        // 3. API: SALVAR PROPOSTA NO BANCO (Admin)
         async function salvarPropostaAPI() {
-            // Clona o HTML interno para não quebrar a tela do admin
             const divHtml = document.getElementById('html-da-proposta').cloneNode(true);
-            
-            // Limpa coisas de administrador antes de salvar no banco para o cliente
             const btnAdmins = divHtml.querySelectorAll('.btn-admin');
             btnAdmins.forEach(b => b.remove());
-            
             const editables = divHtml.querySelectorAll('[contenteditable]');
             editables.forEach(el => el.removeAttribute('contenteditable'));
 
             const htmlFinal = divHtml.innerHTML;
-            
             document.getElementById('loader').style.display = 'flex';
 
             try {
@@ -325,59 +393,46 @@
 
                 if(dados.success) {
                     const link = window.location.origin + window.location.pathname + '?id=' + dados.id;
-                    // Usa prompt para ficar fácil do Bruno copiar o link no PC
-                    prompt("Proposta salva no sistema!\nCopie o link abaixo e envie para o cliente:", link);
+                    prompt("Proposta salva no banco!\nCopie o link abaixo e envie para o cliente:", link);
                 } else {
                     alert("Erro ao salvar: " + (dados.error || "Erro desconhecido"));
                 }
             } catch (err) {
                 document.getElementById('loader').style.display = 'none';
-                // Fallback para caso teste localmente sem o Worker rodando
-                alert("Modo Local / Sem Conexão Cloudflare. Se estiver rodando do seu PC, o banco de dados não está conectado. Suba para o GitHub Pages.");
-                console.log(err);
+                alert("Modo Local / Sem Conexão Cloudflare. Se estiver testando no PC, o banco D1 não está ativo.");
             }
         }
 
-        // 4. API: LER PROPOSTA (Cliente)
         async function carregarProposta(id) {
             document.getElementById('loader').style.display = 'flex';
-            
             try {
                 const resposta = await fetch(`/api/ler?id=${id}`);
                 const dados = await resposta.json();
-                
                 document.getElementById('loader').style.display = 'none';
 
                 if(dados.error) {
-                    document.getElementById('html-da-proposta').innerHTML = `<h2 class="text-center text-red-500 py-20 font-bold">Proposta não encontrada ou expirada.</h2>`;
+                    document.getElementById('html-da-proposta').innerHTML = `<h2 class="text-center text-red-500 py-20 font-bold">Proposta não encontrada.</h2>`;
                     document.getElementById('controles-cliente').classList.add('hidden');
                     return;
                 }
 
-                // Injeta o HTML salvo no banco
                 document.getElementById('html-da-proposta').innerHTML = dados.conteudo_html;
-
-                // Verifica se já está assinada
-                if(dados.status === 'aceito') {
-                    mostrarSelo(dados);
-                }
+                if(dados.status === 'aceito') mostrarSelo(dados);
 
             } catch (err) {
                 document.getElementById('loader').style.display = 'none';
-                console.error(err);
             }
         }
 
-        // 5. API: ACEITAR PROPOSTA (Cliente)
         function abrirModalAssinatura() { document.getElementById('modal-assinatura').style.display = 'flex'; }
         function fecharModal() { document.getElementById('modal-assinatura').style.display = 'none'; }
 
         async function enviarAceiteAPI() {
             const nome = document.getElementById('input-nome-aceite').value;
-            if(!nome) { alert("Por favor, digite seu nome completo para assinar."); return; }
+            if(!nome) { alert("Digite seu nome para assinar."); return; }
 
             const idProposta = new URLSearchParams(window.location.search).get('id');
-            if(!idProposta) { alert("Erro: ID da proposta perdido."); return; }
+            if(!idProposta) { alert("Erro de ID."); return; }
 
             fecharModal();
             document.getElementById('loader').style.display = 'flex';
@@ -393,16 +448,14 @@
                 document.getElementById('loader').style.display = 'none';
 
                 if(dados.success) {
-                    // Prepara dados falsos para preencher a view (o banco já salvou de verdade)
                     dados.nome_cliente = nome;
                     mostrarSelo(dados);
-                    alert("Obrigado! Proposta aceita com sucesso.");
+                    alert("Proposta aceita! O selo de assinatura foi gerado.");
                 } else {
-                    alert("Erro ao processar assinatura.");
+                    alert("Erro ao assinar.");
                 }
             } catch (err) {
                 document.getElementById('loader').style.display = 'none';
-                console.error(err);
             }
         }
 
@@ -411,47 +464,25 @@
             document.getElementById('ass-data').innerText = dados.data_aceite;
             document.getElementById('ass-ip').innerText = dados.ip_cliente;
             document.getElementById('ass-hash').innerText = dados.hash_validador;
-            
             document.getElementById('area-assinatura').classList.remove('hidden');
-            
             const btnAceitar = document.getElementById('btn-aceitar');
             if(btnAceitar) btnAceitar.classList.add('hidden');
-            
             document.getElementById('btn-baixar-pdf').classList.remove('hidden');
             document.getElementById('btn-baixar-pdf').classList.add('flex');
         }
 
         // ==========================================
-        // SCRIPT LOCAL: Exportar para MS Word (.doc)
+        // 4. EXPORTAR PARA WORD
         // ==========================================
         function exportHTMLtoWord(filename) {
             const clone = document.getElementById('conteudo-global-proposta').cloneNode(true);
-            const noPrintElements = clone.querySelectorAll('.no-print');
-            noPrintElements.forEach(el => el.remove());
-            const editables = clone.querySelectorAll('[contenteditable]');
-            editables.forEach(el => el.removeAttribute('contenteditable'));
-            const icons = clone.querySelectorAll('i');
-            icons.forEach(el => el.remove());
+            clone.querySelectorAll('.no-print').forEach(el => el.remove());
+            clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+            clone.querySelectorAll('i').forEach(el => el.remove());
 
-            const content = clone.innerHTML;
-            const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'><title>Proposta KYNTO</title>
-            <style>
-                body { font-family: 'Segoe UI', Arial, sans-serif; color: #333333; font-size: 11pt; line-height: 1.5; }
-                header { background-color: #0B0E14 !important; color: white !important; padding: 20px; border-bottom: 4px solid #0082CD; }
-                header * { color: white !important; }
-                h1 { font-size: 18pt; margin-bottom: 5px; } h2 { font-size: 14pt; color: #0B0E14; margin-bottom: 5px; }
-                h3 { font-size: 12pt; color: #0B0E14; border-bottom: 2px solid #0082CD; padding-bottom: 5px; margin-top: 20px;}
-                h4 { font-size: 11pt; color: #0082CD; margin-bottom: 2px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
-                th, td { border: 1px solid #dddddd; padding: 10px; text-align: left; }
-                th { background-color: #f8fafc; font-weight: bold; }
-                .text-right { text-align: right !important; } .text-center { text-align: center !important; }
-                .text-kynto-blue { color: #0082CD !important; font-weight: bold;}
-                .bg-slate-50 { background-color: #f8fafc; padding: 15px; margin-bottom: 10px; border: 1px solid #eeeeee; }
-            </style></head><body>`;
+            const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Proposta KYNTO</title><style>body { font-family: 'Segoe UI', Arial, sans-serif; color: #333333; font-size: 11pt; line-height: 1.5; } header { background-color: #0B0E14 !important; color: white !important; padding: 20px; border-bottom: 4px solid #0082CD; } header * { color: white !important; } h1 { font-size: 18pt; margin-bottom: 5px; } h2 { font-size: 14pt; color: #0B0E14; margin-bottom: 5px; } h3 { font-size: 12pt; color: #0B0E14; border-bottom: 2px solid #0082CD; padding-bottom: 5px; margin-top: 20px;} h4 { font-size: 11pt; color: #0082CD; margin-bottom: 2px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; } th, td { border: 1px solid #dddddd; padding: 10px; text-align: left; } th { background-color: #f8fafc; font-weight: bold; } .text-right { text-align: right !important; } .text-center { text-align: center !important; } .text-kynto-blue { color: #0082CD !important; font-weight: bold;} .bg-slate-50 { background-color: #f8fafc; padding: 15px; margin-bottom: 10px; border: 1px solid #eeeeee; }</style></head><body>`;
             
-            const html = preHtml + content + "</body></html>";
+            const html = preHtml + clone.innerHTML + "</body></html>";
             const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
