@@ -451,12 +451,10 @@
 </div>
 
 <script>
-    let linkGerado = '';
+   let linkGerado = '';
 
     function salvarPDFAposAceite() {
-        // Agora removemos a classe "open" que é a que controla a exibição do modal no CSS
         document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
-        // Damos 300ms de delay para dar tempo da animação CSS fechar o modal completamente antes do print
         setTimeout(() => window.print(), 300);
     }
 
@@ -490,6 +488,7 @@
 
     function parseMoeda(str) { if(!str) return 0; return parseFloat(str.replace(/[R$\s\.]/g,'').replace(',','.')) || 0; }
     function formataMoeda(num) { return num.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+    
     function recalcularTabela() {
         let total=0;
         document.querySelectorAll('#tbody-orcamento tr').forEach(l => {
@@ -498,9 +497,11 @@
         });
         document.getElementById('calc-total-geral').innerText=formataMoeda(total);
     }
+    
     document.getElementById('tabela-orcamento').addEventListener('input', e => {
         if(e.target.classList.contains('calc-qtd')||e.target.classList.contains('calc-valor')) recalcularTabela();
     });
+    
     document.getElementById('tabela-orcamento').addEventListener('focusout', e => {
         if(e.target.classList.contains('calc-valor')){e.target.innerText=formataMoeda(parseMoeda(e.target.innerText));recalcularTabela();}
     });
@@ -511,6 +512,7 @@
         document.getElementById('tbody-orcamento').appendChild(tr); recalcularTabela();
     }
     function removerLinha(btn) { btn.closest('tr').remove(); recalcularTabela(); }
+    
     function adicionarEscopo() {
         const div=document.createElement('div'); div.className='escopo-card';
         div.innerHTML=`<div class="escopo-icon"><i class="ph-bold ph-gear"></i></div><div style="flex:1;"><h4 contenteditable="true">Novo Serviço</h4><p contenteditable="true">Descreva o serviço aqui...</p></div><button onclick="this.closest('.escopo-card').remove()" class="btn-admin no-print escopo-del" style="color:#f87171;background:none;border:none;cursor:pointer;padding:6px;font-size:16px;opacity:0;transition:opacity .2s;flex-shrink:0;border-radius:6px;"><i class="ph-bold ph-trash"></i></button>`;
@@ -550,6 +552,7 @@
         document.getElementById('share-email').href=`mailto:?subject=Proposta Comercial KYNTO - ${ref}&body=Olá,%0A%0ASeguem os detalhes da nossa proposta:%0A${link}`;
         document.getElementById('modal-link').classList.add('open');
     }
+    
     function fecharModalLink() { document.getElementById('modal-link').classList.remove('open'); }
 
     function copiarLink() {
@@ -579,6 +582,7 @@
         document.getElementById('modal-total-resumo').innerText=total;
         document.getElementById('modal-assinatura').classList.add('open');
     }
+    
     function fecharModal() { document.getElementById('modal-assinatura').classList.remove('open'); }
     function fecharModalAceito() { document.getElementById('modal-aceito').classList.remove('open'); }
 
@@ -587,13 +591,25 @@
         if(!nome){document.getElementById('input-nome-aceite').style.borderColor='#ef4444';return;}
         const idProposta=new URLSearchParams(window.location.search).get('id');
         if(!idProposta) return;
+        
         fecharModal();
         document.getElementById('loader').style.display='flex';
+        
         try {
             const r=await fetch('/api/aceitar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:idProposta,nome_cliente:nome})});
             const d=await r.json();
             document.getElementById('loader').style.display='none';
-            if(d.success){d.nome_cliente=nome;mostrarSelo(d);document.getElementById('modal-aceito').classList.add('open');}
+            if(d.success){
+                // --- CORREÇÃO AQUI: Mapeando os nomes curtos da API para os nomes longos da tela ---
+                const dadosSelo = {
+                    nome_cliente: nome,
+                    data_aceite: d.data,
+                    ip_cliente: d.ip,
+                    hash_validador: d.hash
+                };
+                mostrarSelo(dadosSelo);
+                document.getElementById('modal-aceito').classList.add('open');
+            }
             else alert("Erro ao assinar.");
         } catch(err){
             document.getElementById('loader').style.display='none';
@@ -610,6 +626,7 @@
         document.getElementById('ass-ip').innerText=dados.ip_cliente;
         document.getElementById('ass-hash').innerText=dados.hash_validador;
         document.getElementById('area-assinatura').classList.remove('hidden');
+        
         const btnA=document.getElementById('btn-aceitar');
         if(btnA) btnA.style.display='none';
         const btnPdf=document.getElementById('btn-baixar-pdf');
