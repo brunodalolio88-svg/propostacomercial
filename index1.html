@@ -4,931 +4,574 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposta Comercial | KYNTO</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
-        :root {
-            --blue: #0082CD;
-            --blue-light: #60c5ff;
-            --dark: #0B0E14;
-            --dark2: #141820;
-            --mid: #1e293b;
-            --text: #3d4f63;
-            --light: #f7f9fc;
-            --border: #e2e8f0;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            background: #edf0f5;
-            background-image:
-                radial-gradient(circle at 15% 0%, rgba(0,130,205,0.07) 0%, transparent 50%),
-                radial-gradient(circle at 85% 100%, rgba(11,14,20,0.05) 0%, transparent 50%);
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-        }
-
-        /* ──────── CONTAINER ──────── */
-        .proposal-container {
-            width: 94%;
-            max-width: 920px;
-            margin: 90px auto 60px;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow:
-                0 1px 2px rgba(0,0,0,0.04),
-                0 8px 32px rgba(0,0,0,0.08),
-                0 24px 64px rgba(0,0,0,0.06);
-            overflow: hidden;
-        }
-
-        /* ──────── HEADER ──────── */
-        .prop-header {
-            background: var(--dark);
-            padding: 40px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        .prop-header::before {
-            content: '';
-            position: absolute;
-            top: -80px; right: -80px;
-            width: 300px; height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,130,205,0.15) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .prop-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--blue), var(--blue-light), var(--blue), transparent);
-        }
-
-        .kynto-logo {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 30px;
-            letter-spacing: -2px;
-            color: #fff;
-            display: flex;
-            align-items: flex-start;
-            line-height: 1;
-        }
-        .kynto-logo .dot { color: var(--blue); font-size: 44px; line-height: 0.65; margin-left: 1px; }
-        .logo-sub { color: #475569; font-size: 11px; margin-top: 7px; letter-spacing: 0.5px; }
-
-        .prop-header-right { text-align: right; }
-        .prop-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .prop-ref-badge {
-            display: inline-block;
-            background: rgba(0,130,205,0.15);
-            border: 1px solid rgba(0,130,205,0.3);
-            color: var(--blue-light);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 100px;
-            margin-top: 8px;
-            letter-spacing: 0.5px;
-        }
-        .prop-date { color: #475569; font-size: 12px; margin-top: 6px; }
-
-        /* ──────── PARTIES STRIP ──────── */
-        .parties-strip {
-            display: grid;
-            grid-template-columns: 1fr 1px 1fr;
-            background: #fff;
-            border-bottom: 1px solid var(--border);
-        }
-        .party-col { padding: 28px 40px; }
-        .party-divider { background: var(--border); }
-        .party-label {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--blue);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .party-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-        .party-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--dark);
-            line-height: 1.3;
-        }
-        .party-detail { font-size: 13px; color: #64748b; margin-top: 4px; }
-        .party-col.right { text-align: right; }
-        .party-col.right .party-label { flex-direction: row-reverse; }
-        .party-col.right .party-label::after { display: none; }
-        .party-col.right .party-label::before {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        /* ──────── BODY ──────── */
-        .prop-body { padding: 48px; }
-
-        /* ──────── SECTION ──────── */
-        .section-wrap { margin-bottom: 48px; }
-        .section-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 20px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border);
-            position: relative;
-        }
-        .section-head::after {
-            content: '';
-            position: absolute;
-            bottom: -1px; left: 0;
-            width: 36px; height: 2px;
-            background: var(--blue);
-            border-radius: 2px;
-        }
-        .section-num {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--blue);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-            opacity: 0.8;
-        }
-        .section-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        /* ──────── ADD BUTTON ──────── */
-        .add-btn {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--blue);
-            background: rgba(0,130,205,0.07);
-            border: 1px solid rgba(0,130,205,0.2);
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            white-space: nowrap;
-        }
-        .add-btn:hover { background: rgba(0,130,205,0.14); border-color: rgba(0,130,205,0.4); }
-
-        /* ──────── APRESENTAÇÃO ──────── */
-        .apresentacao-text { color: #4a5568; font-size: 14px; line-height: 1.8; }
-        .apresentacao-text p + p { margin-top: 12px; }
-
-        /* ──────── ESCOPO CARDS ──────── */
-        .escopo-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            background: var(--light);
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--blue);
-            padding: 18px 20px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            transition: box-shadow 0.2s;
-        }
-        .escopo-card:hover { box-shadow: 0 2px 12px rgba(0,130,205,0.08); }
-        .escopo-icon {
-            width: 36px; height: 36px;
-            border-radius: 8px;
-            background: rgba(0,130,205,0.1);
-            color: var(--blue);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 17px;
-            flex-shrink: 0;
-        }
-        .escopo-card h4 { font-weight: 600; color: var(--dark); font-size: 14px; margin-bottom: 4px; }
-        .escopo-card p { font-size: 13px; color: #64748b; line-height: 1.55; }
-
-        /* ──────── TABLE ──────── */
-        .table-wrap {
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        .inv-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .inv-table thead tr { background: var(--dark); }
-        .inv-table thead th {
-            padding: 13px 18px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.7);
-            border: none;
-        }
-        .inv-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
-        .inv-table tbody tr:last-child { border-bottom: none; }
-        .inv-table tbody tr:hover { background: #f7f9fc; }
-        .inv-table tbody td { padding: 14px 18px; color: var(--text); border: none; }
-        .inv-table tfoot tr { background: linear-gradient(90deg, #0B0E14, #141820); }
-        .inv-table tfoot td {
-            padding: 15px 18px;
-            border: none;
-            color: rgba(255,255,255,0.5);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .inv-table tfoot .total-cell {
-            color: #fff;
-            font-family: 'Syne', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        /* ──────── CONDITIONS ──────── */
-        .condition-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .condition-item {
-            background: var(--light);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 16px 18px;
-            font-size: 13px;
-            color: #4a5568;
-            line-height: 1.6;
-        }
-        .condition-item .cond-label {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: var(--blue);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* ──────── SEAL ──────── */
-        .seal-wrap {
-            padding: 0 48px 40px;
-        }
-        .seal-box {
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            border: 1px solid #86efac;
-            border-radius: 12px;
-            padding: 24px 28px;
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
-        .seal-icon { color: #16a34a; font-size: 44px; flex-shrink: 0; line-height: 1; }
-        .seal-title { font-family: 'Syne', sans-serif; font-weight: 700; color: #15803d; font-size: 16px; margin-bottom: 8px; }
-        .seal-detail { font-size: 12px; color: #166534; margin-top: 3px; }
-        .seal-hash {
-            margin-top: 12px;
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid #bbf7d0;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 11px;
-            color: #15803d;
-            word-break: break-all;
-        }
-
-        /* ──────── FOOTER ──────── */
-        .prop-footer {
-            background: var(--dark);
-            padding: 24px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            border-top: 1px solid #1e293b;
-        }
-        .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: #fff; letter-spacing: -1px; }
-        .footer-logo span { color: var(--blue); }
-        .footer-sub { color: #334155; font-size: 11px; margin-top: 2px; }
-        .footer-info { font-size: 12px; color: #334155; text-align: right; line-height: 1.8; }
-
-        /* ──────── EDIT MODE ──────── */
-        .modo-edicao [contenteditable="true"] { border-radius: 4px; transition: all 0.15s; }
-        .modo-edicao [contenteditable="true"]:hover {
-            background: rgba(0,130,205,0.05);
-            outline: 1px dashed rgba(0,130,205,0.35);
-            cursor: text;
-        }
-        .modo-edicao [contenteditable="true"]:focus {
-            background: #fff;
-            outline: 2px solid var(--blue);
-            box-shadow: 0 0 0 4px rgba(0,130,205,0.1);
-        }
-        .modo-edicao .btn-remove-row { opacity: 0; transition: opacity 0.2s; }
-        .modo-edicao tr:hover .btn-remove-row { opacity: 1; }
-
-        /* ──────── CLIENT MODE ──────── */
-        .modo-cliente .btn-admin { display: none !important; }
-        .modo-cliente [contenteditable="true"] { pointer-events: none; outline: none; }
-
-        /* ──────── ADMIN BAR ──────── */
-        #aviso-admin {
-            background: linear-gradient(90deg, #0B0E14, #141c2d);
-            color: var(--blue-light);
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            border-bottom: 1px solid rgba(0,130,205,0.2);
-        }
-
-        /* ──────── CTRL BUTTONS ──────── */
-        .ctrl-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            border: none;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.2s;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-            white-space: nowrap;
-        }
-        .ctrl-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-        .ctrl-btn i { font-size: 16px; }
-
-        /* ──────── MODAL ──────── */
-        .modal-overlay { background: rgba(11,14,20,0.88); backdrop-filter: blur(8px); }
-        .modal-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 36px;
-            max-width: 440px;
-            width: 100%;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.4);
-        }
-        .modal-icon-wrap {
-            width: 52px; height: 52px;
-            border-radius: 14px;
-            background: rgba(22,163,74,0.1);
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 18px;
-        }
-        .modal-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
-        .modal-input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: var(--dark);
-            margin-top: 8px; margin-bottom: 24px;
-            transition: border 0.2s, box-shadow 0.2s;
-        }
-        .modal-input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,130,205,0.12); }
-
-        /* ──────── LOADER ──────── */
-        #loader { display: none; background: rgba(11,14,20,0.75); z-index: 9999; backdrop-filter: blur(8px); }
-
-        /* ──────── PRINT ──────── */
-        @media print {
-            @page { margin: 1cm; size: A4 portrait; }
-            body { background: #fff; }
-            .proposal-container { box-shadow: none; margin: 0; max-width: 100%; width: 100%; border-radius: 0; }
-            .no-print { display: none !important; }
-            [contenteditable="true"] { outline: none !important; background: transparent !important; }
-            tr { page-break-inside: avoid; }
-        }
-
-        /* ──────── RESPONSIVE ──────── */
-        @media (max-width: 640px) {
-            .proposal-container { width: 100%; margin: 58px 0 0; border-radius: 0; }
-            .prop-header { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
-            .prop-header-right { text-align: left; }
-            .parties-strip { grid-template-columns: 1fr; }
-            .party-divider { height: 1px; width: 100%; }
-            .party-col { padding: 20px; }
-            .party-col.right { text-align: left; }
-            .party-col.right .party-label { flex-direction: row; }
-            .party-col.right .party-label::before { display: none; }
-            .party-col.right .party-label::after { display: block; }
-            .prop-body { padding: 24px 20px; }
-            .condition-grid { grid-template-columns: 1fr; }
-            .prop-footer { padding: 20px; flex-direction: column; align-items: flex-start; }
-            .footer-info { text-align: left; }
-            .seal-wrap { padding: 0 20px 28px; }
+        :root{--blue:#0082CD;--blue-glow:rgba(0,130,205,0.25);--blue-light:#60c5ff;--dark:#0B0E14;--mid:#141820;--text:#3d4f63;--light:#f7f9fc;--border:#e2e8f0;--green:#16a34a;}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{background:#eaecf0;background-image:radial-gradient(ellipse at 10% 0%,rgba(0,130,205,.08) 0%,transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(11,14,20,.06) 0%,transparent 55%);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+        .proposal-container{width:94%;max-width:920px;margin:100px auto 60px;background:#fff;border-radius:16px;box-shadow:0 2px 4px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.09),0 32px 80px rgba(0,0,0,.05);overflow:hidden;}
+        .prop-header{background:var(--dark);padding:40px 48px;display:flex;justify-content:space-between;align-items:center;gap:24px;position:relative;overflow:hidden;}
+        .prop-header::before{content:'';position:absolute;top:-100px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(0,130,205,.14) 0%,transparent 70%);pointer-events:none;}
+        .prop-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--blue) 30%,var(--blue-light) 50%,var(--blue) 70%,transparent 100%);}
+        .kynto-logo{font-family:'Arial Black',sans-serif;font-weight:900;font-size:28px;letter-spacing:-1px;color:#fff;display:flex;align-items:flex-start;line-height:1;}
+        .kynto-logo .dot{color:var(--blue);font-size:46px;line-height:.65;margin-left:1px;}
+        .logo-sub{color:#475569;font-size:11px;margin-top:6px;letter-spacing:.4px;}
+        .prop-header-right{text-align:right;}
+        .prop-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:2.5px;text-transform:uppercase;}
+        .prop-ref-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,130,205,.14);border:1px solid rgba(0,130,205,.3);color:var(--blue-light);font-size:11px;font-weight:600;padding:4px 12px;border-radius:100px;margin-top:8px;letter-spacing:.5px;}
+        .prop-date{color:#475569;font-size:12px;margin-top:6px;}
+        .parties-strip{display:grid;grid-template-columns:1fr 1px 1fr;background:#fff;border-bottom:1px solid var(--border);}
+        .party-col{padding:28px 40px;}
+        .party-divider{background:var(--border);}
+        .party-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+        .party-label::after{content:'';flex:1;height:1px;background:var(--border);}
+        .party-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--dark);line-height:1.3;}
+        .party-detail{font-size:13px;color:#64748b;margin-top:4px;}
+        .party-col.right{text-align:right;}
+        .party-col.right .party-label{flex-direction:row-reverse;}
+        .party-col.right .party-label::after{display:none;}
+        .party-col.right .party-label::before{content:'';flex:1;height:1px;background:var(--border);}
+        .prop-body{padding:48px;}
+        .section-wrap{margin-bottom:48px;}
+        .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);position:relative;}
+        .section-head::after{content:'';position:absolute;bottom:-1px;left:0;width:36px;height:2px;background:var(--blue);border-radius:2px;}
+        .section-num{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;opacity:.8;}
+        .section-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--dark);}
+        .add-btn{font-size:12px;font-weight:600;color:var(--blue);background:rgba(0,130,205,.07);border:1px solid rgba(0,130,205,.2);border-radius:6px;padding:6px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+        .add-btn:hover{background:rgba(0,130,205,.14);border-color:rgba(0,130,205,.4);}
+        .apresentacao-text{color:#4a5568;font-size:14px;line-height:1.8;}
+        .apresentacao-text p+p{margin-top:12px;}
+        .escopo-card{display:flex;align-items:flex-start;gap:16px;background:var(--light);border:1px solid var(--border);border-left:3px solid var(--blue);padding:18px 20px;border-radius:10px;margin-bottom:10px;position:relative;transition:box-shadow .2s;}
+        .escopo-card:hover{box-shadow:0 2px 12px rgba(0,130,205,.08);}
+        .escopo-icon{width:36px;height:36px;border-radius:8px;background:rgba(0,130,205,.1);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+        .escopo-card h4{font-weight:600;color:var(--dark);font-size:14px;margin-bottom:4px;}
+        .escopo-card p{font-size:13px;color:#64748b;line-height:1.55;}
+        .table-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+        .inv-table{width:100%;border-collapse:collapse;font-size:13px;}
+        .inv-table thead tr{background:var(--dark);}
+        .inv-table thead th{padding:13px 18px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);border:none;}
+        .inv-table tbody tr{border-bottom:1px solid var(--border);transition:background .12s;}
+        .inv-table tbody tr:last-child{border-bottom:none;}
+        .inv-table tbody tr:hover{background:#f7f9fc;}
+        .inv-table tbody td{padding:14px 18px;color:var(--text);border:none;}
+        .inv-table tfoot tr{background:linear-gradient(90deg,#0B0E14,#141820);}
+        .inv-table tfoot td{padding:16px 18px;border:none;color:rgba(255,255,255,.4);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+        .inv-table tfoot .total-cell{color:#fff;font-family:'Syne',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px;text-align:right;}
+        .condition-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .condition-item{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:16px 18px;font-size:13px;color:#4a5568;line-height:1.65;}
+        .cond-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--blue);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+        .seal-wrap{padding:0 48px 40px;}
+        .seal-box{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:12px;padding:24px 28px;display:flex;gap:20px;align-items:flex-start;}
+        .seal-icon{color:#16a34a;font-size:44px;flex-shrink:0;line-height:1;}
+        .seal-title{font-family:'Syne',sans-serif;font-weight:700;color:#15803d;font-size:16px;margin-bottom:8px;}
+        .seal-detail{font-size:12px;color:#166534;margin-top:3px;}
+        .seal-hash{margin-top:12px;padding:8px 12px;background:rgba(255,255,255,.6);border:1px solid #bbf7d0;border-radius:6px;font-family:monospace;font-size:11px;color:#15803d;word-break:break-all;}
+        .prop-footer{background:var(--dark);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+        .footer-logo{font-family:'Arial Black',sans-serif;font-size:18px;font-weight:900;color:#fff;letter-spacing:-1px;display:flex;align-items:flex-start;}
+        .footer-logo .dot{color:var(--blue);font-size:26px;line-height:.65;}
+        .footer-sub{color:#334155;font-size:11px;margin-top:2px;}
+        .footer-info{font-size:12px;color:#334155;text-align:right;line-height:1.8;}
+        .modo-edicao [contenteditable="true"]{border-radius:4px;transition:all .15s;}
+        .modo-edicao [contenteditable="true"]:hover{background:rgba(0,130,205,.05);outline:1px dashed rgba(0,130,205,.35);cursor:text;}
+        .modo-edicao [contenteditable="true"]:focus{background:#fff;outline:2px solid var(--blue);box-shadow:0 0 0 4px rgba(0,130,205,.1);}
+        .modo-edicao .btn-remove-row{opacity:0;transition:opacity .2s;}
+        .modo-edicao tr:hover .btn-remove-row{opacity:1;}
+        .modo-cliente .btn-admin{display:none!important;}
+        .modo-cliente [contenteditable="true"]{pointer-events:none;outline:none;}
+        #admin-toolbar{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--dark);border-bottom:1px solid rgba(0,130,205,.2);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+        .toolbar-brand{display:flex;align-items:center;gap:10px;}
+        .t-logo{font-family:'Arial Black',sans-serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:-.5px;display:flex;align-items:flex-start;}
+        .t-logo .dot{color:var(--blue);font-size:22px;line-height:.65;}
+        .toolbar-badge{background:rgba(0,130,205,.15);border:1px solid rgba(0,130,205,.25);color:var(--blue-light);font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;letter-spacing:.5px;}
+        .toolbar-hint{color:#475569;font-size:12px;display:flex;align-items:center;gap:6px;}
+        .toolbar-hint i{color:var(--blue);}
+        .toolbar-actions{display:flex;align-items:center;gap:8px;}
+        #client-banner{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--dark);border-bottom:1px solid rgba(255,255,255,.06);padding:0 24px;height:56px;display:none;align-items:center;justify-content:space-between;gap:16px;}
+        .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;border:none;transition:all .18s;white-space:nowrap;}
+        .btn i{font-size:15px;}
+        .btn:hover{transform:translateY(-1px);}
+        .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(0,130,205,.35);}
+        .btn-primary:hover{background:#0073b8;box-shadow:0 6px 18px rgba(0,130,205,.45);}
+        .btn-dark{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.1);}
+        .btn-dark:hover{background:rgba(255,255,255,.14);}
+        .btn-word{background:rgba(43,87,154,.7);color:#fff;border:1px solid rgba(43,87,154,.5);}
+        .btn-word:hover{background:rgba(43,87,154,.9);}
+        .btn-accept{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;box-shadow:0 4px 16px rgba(22,163,74,.4);padding:10px 22px;font-size:14px;animation:pulse-green 2.5s infinite;}
+        .btn-accept:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(22,163,74,.5);}
+        .btn-ghost{background:transparent;color:#94a3b8;border:1px solid rgba(255,255,255,.1);}
+        .btn-ghost:hover{background:rgba(255,255,255,.06);color:#fff;}
+        @keyframes pulse-green{0%,100%{box-shadow:0 4px 16px rgba(22,163,74,.4);}50%{box-shadow:0 4px 28px rgba(22,163,74,.65);}}
+        #loader{display:none;background:rgba(11,14,20,.8);z-index:9999;backdrop-filter:blur(8px);}
+        .modal-overlay{position:fixed;inset:0;z-index:9000;background:rgba(11,14,20,.88);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+        .modal-overlay.open{display:flex;}
+        .modal-box{background:#fff;border-radius:18px;padding:36px;max-width:480px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.04);animation:modalIn .25s cubic-bezier(.34,1.56,.64,1);}
+        @keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+        .modal-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:26px;}
+        .modal-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:8px;}
+        .modal-desc{color:#64748b;font-size:13px;line-height:1.65;margin-bottom:20px;}
+        .modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#374151;display:block;margin-bottom:6px;}
+        .modal-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);margin-bottom:20px;transition:border .2s,box-shadow .2s;background:#fafafa;}
+        .modal-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,130,205,.1);background:#fff;}
+        .modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+        .modal-divider{height:1px;background:var(--border);margin:20px 0;}
+        .link-box{display:flex;align-items:center;gap:8px;background:#f1f5f9;border:1.5px solid var(--border);border-radius:10px;padding:4px 4px 4px 14px;margin-bottom:20px;}
+        .link-box span{flex:1;font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace;}
+        .copy-btn{flex-shrink:0;background:var(--dark);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;transition:all .15s;}
+        .copy-btn:hover{background:var(--blue);}
+        .copy-btn.copied{background:var(--green);}
+        .share-options{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+        .share-btn{flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all .15s;border:none;}
+        .share-wa{background:#dcfce7;color:#15803d;}
+        .share-wa:hover{background:#bbf7d0;}
+        .share-email{background:#e0f2fe;color:#0369a1;}
+        .share-email:hover{background:#bae6fd;}
+        @keyframes successPop{0%{transform:scale(0);opacity:0;}60%{transform:scale(1.15);}100%{transform:scale(1);opacity:1;}}
+        .success-check{animation:successPop .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+        @media print{@page{margin:1cm;size:A4 portrait;}body{background:#fff;}.proposal-container{box-shadow:none;margin:0;max-width:100%;width:100%;border-radius:0;}.no-print{display:none!important;}[contenteditable="true"]{outline:none!important;background:transparent!important;}tr{page-break-inside:avoid;}#admin-toolbar,#client-banner{display:none!important;}}
+        @media(max-width:640px){
+            .proposal-container{width:100%;margin:56px 0 0;border-radius:0;}
+            .prop-header{padding:24px 20px;flex-direction:column;align-items:flex-start;}
+            .prop-header-right{text-align:left;}
+            .parties-strip{grid-template-columns:1fr;}
+            .party-divider{height:1px;width:100%;}
+            .party-col{padding:20px;}
+            .party-col.right{text-align:left;}
+            .party-col.right .party-label{flex-direction:row;}
+            .party-col.right .party-label::before{display:none;}
+            .party-col.right .party-label::after{display:block;}
+            .prop-body{padding:24px 20px;}
+            .condition-grid{grid-template-columns:1fr;}
+            .prop-footer{padding:20px;flex-direction:column;align-items:flex-start;}
+            .footer-info{text-align:left;}
+            .seal-wrap{padding:0 20px 28px;}
+            #admin-toolbar{padding:0 12px;}
+            .toolbar-hint{display:none;}
+            .toolbar-badge{display:none;}
+            #client-banner{padding:0 12px;}
+            .modal-box{padding:24px;border-radius:14px;}
         }
     </style>
 </head>
 <body class="antialiased modo-edicao" id="body-app">
 
-    <!-- LOADER -->
-    <div id="loader" class="fixed inset-0 flex items-center justify-center">
-        <div class="text-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0082CD] mx-auto mb-4"></div>
-            <p style="color:#60c5ff; font-size:12px; font-family:'DM Sans',sans-serif; letter-spacing:0.5px;">Processando...</p>
+<div id="loader" class="fixed inset-0 flex items-center justify-center">
+    <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 mx-auto mb-4" style="border-color:var(--blue);"></div>
+        <p style="color:#60c5ff;font-size:12px;letter-spacing:.5px;">Processando...</p>
+    </div>
+</div>
+
+<!-- ADMIN TOOLBAR -->
+<div id="admin-toolbar" class="no-print btn-admin">
+    <div class="toolbar-brand">
+        <div class="t-logo">KYNTO<span class="dot">.</span></div>
+        <span class="toolbar-badge">CRIAÇÃO</span>
+        <span class="toolbar-hint"><i class="ph-fill ph-pencil-simple"></i> Clique em qualquer texto para editar</span>
+    </div>
+    <div class="toolbar-actions">
+        <button onclick="exportHTMLtoWord('Proposta_KYNTO')" class="btn btn-word no-print">
+            <i class="ph-bold ph-file-doc"></i><span class="hidden sm:inline">Word</span>
+        </button>
+        <button onclick="window.print()" class="btn btn-dark no-print">
+            <i class="ph-bold ph-file-pdf"></i><span class="hidden sm:inline">PDF</span>
+        </button>
+        <button onclick="salvarPropostaAPI()" class="btn btn-primary no-print">
+            <i class="ph-bold ph-paper-plane-tilt"></i><span>Gerar Link</span>
+        </button>
+    </div>
+</div>
+
+<!-- CLIENT BANNER -->
+<div id="client-banner" class="no-print">
+    <div style="display:flex;align-items:center;gap:10px;">
+        <div class="t-logo">KYNTO<span class="dot">.</span></div>
+        <div style="display:flex;align-items:center;gap:6px;color:#475569;font-size:12px;" class="hidden sm:flex">
+            <i class="ph-fill ph-file-text" style="color:var(--blue);"></i>
+            Revise a proposta abaixo
         </div>
     </div>
-
-    <!-- ADMIN BAR -->
-    <div id="aviso-admin" class="fixed top-0 left-0 w-full text-center py-2 no-print z-50 btn-admin">
-        <i class="ph-fill ph-pencil-simple"></i>
-        <span style="color:#475569;"> MODO CRIAÇÃO — </span>
-        Digite os valores (ex: 350.50) e clique fora para formatar. O total calcula automaticamente.
-    </div>
-
-    <!-- ADMIN CONTROLS -->
-    <div id="controles-admin" class="fixed top-12 right-4 sm:top-14 sm:right-6 flex flex-col gap-2 no-print z-40 btn-admin">
-        <button onclick="salvarPropostaAPI()" class="ctrl-btn" style="background:var(--blue); color:#fff;">
-            <i class="ph-bold ph-cloud-arrow-up"></i>
-            <span class="hidden sm:inline">Gerar Link</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="window.print()" id="btn-baixar-pdf" class="btn btn-ghost hidden no-print" style="font-size:12px;padding:7px 12px;">
+            <i class="ph-bold ph-file-pdf"></i><span class="hidden sm:inline">Salvar PDF</span>
         </button>
-        <button onclick="window.print()" class="ctrl-btn" style="background:#0B0E14; color:#fff;">
-            <i class="ph-bold ph-file-pdf"></i>
-            <span class="hidden sm:inline">Salvar PDF</span>
-        </button>
-        <button onclick="exportHTMLtoWord('Proposta_KYNTO')" class="ctrl-btn" style="background:#2b579a; color:#fff;">
-            <i class="ph-bold ph-file-doc"></i>
-            <span class="hidden sm:inline">Salvar Word</span>
+        <button onclick="abrirModalAssinatura()" id="btn-aceitar" class="btn btn-accept no-print">
+            <i class="ph-bold ph-check-circle"></i> Aceitar Proposta
         </button>
     </div>
+</div>
 
-    <!-- CLIENT CONTROLS -->
-    <div id="controles-cliente" class="fixed top-4 right-4 sm:top-6 sm:right-6 flex-col gap-3 no-print z-40 hidden">
-        <button onclick="abrirModalAssinatura()" id="btn-aceitar" class="ctrl-btn animate-bounce" style="background:#16a34a; color:#fff; padding:14px 24px; font-size:14px;">
-            <i class="ph-bold ph-check-circle" style="font-size:20px;"></i> Aceitar Proposta
-        </button>
-        <button onclick="window.print()" id="btn-baixar-pdf" class="ctrl-btn hidden" style="background:#0B0E14; color:#fff;">
-            <i class="ph-bold ph-file-pdf"></i> Salvar PDF
-        </button>
-    </div>
-
-    <!-- PROPOSAL DOCUMENT -->
-    <div class="proposal-container" id="conteudo-global-proposta">
-        <div id="html-da-proposta">
-
-            <!-- HEADER -->
-            <header class="prop-header">
-                <div>
-                    <div class="kynto-logo">KYNTO<span class="dot">.</span></div>
-                    <p class="logo-sub">Soluções em Tecnologia da Informação</p>
-                </div>
-                <div class="prop-header-right">
-                    <div class="prop-title">Proposta Comercial</div>
-                    <div>
-                        <span class="prop-ref-badge">Ref: <span contenteditable="true" id="prop-ref">#KYN-0000</span></span>
-                    </div>
-                    <div class="prop-date" contenteditable="true" id="prop-data">Data: ---</div>
-                </div>
-            </header>
-
-            <!-- PARTIES -->
-            <div class="parties-strip">
-                <div class="party-col">
-                    <div class="party-label">Preparado para</div>
-                    <div class="party-name" contenteditable="true">[NOME DA EMPRESA CLIENTE]</div>
-                    <div class="party-detail" contenteditable="true">A/C: [Nome do Responsável]</div>
-                    <div class="party-detail" contenteditable="true">[Endereço, Osasco - SP]</div>
-                </div>
-                <div class="party-divider"></div>
-                <div class="party-col right">
-                    <div class="party-label">Preparado por</div>
-                    <div class="party-name">Bruno Dal'Olio Santos</div>
-                    <div class="party-detail">Responsável Técnico</div>
-                    <div class="party-detail">comercial@kynto.com.br</div>
-                    <div class="party-detail">(11) 91517-0436</div>
-                </div>
-            </div>
-
-            <!-- BODY -->
-            <div class="prop-body">
-
-                <!-- 01. Apresentação -->
-                <div class="section-wrap">
-                    <div class="section-head">
-                        <div>
-                            <div class="section-num">01</div>
-                            <div class="section-title">Apresentação</div>
-                        </div>
-                    </div>
-                    <div contenteditable="true" class="apresentacao-text">
-                        <p>Olá, <strong>[Nome do Cliente]</strong>.</p>
-                        <p>Agradecemos a oportunidade de apresentar esta proposta técnica e comercial. A <strong>KYNTO</strong> atua com foco em garantir que a infraestrutura tecnológica da sua empresa funcione com máxima performance, segurança e estabilidade.</p>
-                        <p>Com base em nossa conversa, elaboramos o escopo abaixo focado em resolver seus desafios atuais de forma rápida e definitiva.</p>
-                    </div>
-                </div>
-
-                <!-- 02. Escopo -->
-                <div class="section-wrap">
-                    <div class="section-head">
-                        <div>
-                            <div class="section-num">02</div>
-                            <div class="section-title">Escopo dos Serviços</div>
-                        </div>
-                        <button onclick="adicionarEscopo()" class="add-btn btn-admin no-print">
-                            <i class="ph-bold ph-plus"></i> Adicionar Tópico
-                        </button>
-                    </div>
-                    <p style="font-size:13px; color:#64748b; margin-bottom:16px;" contenteditable="true">Propomos a execução dos seguintes serviços e fornecimento de materiais:</p>
-
-                    <div id="lista-escopo">
-                        <div class="escopo-card">
-                            <div class="escopo-icon"><i class="ph-bold ph-wrench"></i></div>
-                            <div style="flex:1;">
-                                <h4 contenteditable="true">Upgrade de Performance</h4>
-                                <p contenteditable="true">Descrição detalhada do serviço a ser realizado...</p>
-                            </div>
-                            <button onclick="this.closest('.escopo-card').remove()" class="btn-admin no-print escopo-del-btn" style="color:#f87171; background:none; border:none; cursor:pointer; padding:4px 6px; font-size:16px; opacity:0; transition:opacity 0.2s; flex-shrink:0; border-radius:6px;">
-                                <i class="ph-bold ph-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 03. Investimento -->
-                <div class="section-wrap">
-                    <div class="section-head">
-                        <div>
-                            <div class="section-num">03</div>
-                            <div class="section-title">Investimento</div>
-                        </div>
-                        <button onclick="adicionarLinhaTabela()" class="add-btn btn-admin no-print">
-                            <i class="ph-bold ph-plus"></i> Add Item
-                        </button>
-                    </div>
-
-                    <div class="table-wrap overflow-x-auto">
-                        <table class="inv-table" id="tabela-orcamento" style="min-width:480px;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:left;">Descrição do Serviço / Produto</th>
-                                    <th style="text-align:center; width:70px;">Qtd</th>
-                                    <th style="text-align:right; width:130px;">V. Unitário</th>
-                                    <th style="text-align:right; width:130px;">Total</th>
-                                    <th class="no-print btn-admin" style="width:40px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody-orcamento">
-                                <tr class="group">
-                                    <td contenteditable="true">Serviço / Produto Inicial</td>
-                                    <td contenteditable="true" class="calc-qtd" style="text-align:center;">1</td>
-                                    <td contenteditable="true" class="calc-valor" style="text-align:right;">R$ 0,00</td>
-                                    <td class="calc-total-linha" style="text-align:right; font-weight:600; color:var(--dark);">R$ 0,00</td>
-                                    <td class="no-print btn-admin" style="text-align:center; padding:0 8px;">
-                                        <button onclick="removerLinha(this)" class="btn-remove-row" style="color:#f87171; background:none; border:none; cursor:pointer; padding:6px; font-size:14px; border-radius:4px; transition:background 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='none'">
-                                            <i class="ph-bold ph-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" style="text-align:right; padding-right:18px;">Total do Investimento</td>
-                                    <td class="total-cell" id="calc-total-geral" style="text-align:right;">R$ 0,00</td>
-                                    <td class="no-print btn-admin"></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 04. Condições -->
-                <div class="section-wrap" style="margin-bottom:0;">
-                    <div class="section-head">
-                        <div>
-                            <div class="section-num">04</div>
-                            <div class="section-title">Condições Gerais</div>
-                        </div>
-                    </div>
-                    <div class="condition-grid">
-                        <div class="condition-item" contenteditable="true">
-                            <div class="cond-label"><i class="ph-fill ph-currency-circle-dollar"></i> Pagamento</div>
-                            50% na aprovação da proposta e 50% na conclusão. Via PIX ou Cartão.
-                        </div>
-                        <div class="condition-item" contenteditable="true">
-                            <div class="cond-label"><i class="ph-fill ph-clock"></i> Prazo</div>
-                            Até 2 dias úteis após o aceite da proposta.
-                        </div>
-                        <div class="condition-item" contenteditable="true">
-                            <div class="cond-label"><i class="ph-fill ph-shield-check"></i> Garantia</div>
-                            90 dias de garantia sobre o serviço técnico prestado.
-                        </div>
-                        <div class="condition-item" contenteditable="true">
-                            <div class="cond-label"><i class="ph-fill ph-calendar-check"></i> Validade</div>
-                            Esta proposta é válida por 5 dias corridos.
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- SEAL -->
-        <div class="seal-wrap">
-            <section id="area-assinatura" class="hidden" style="margin-top:8px; padding-top:28px; border-top:1px solid var(--border);">
-                <div class="seal-box">
-                    <div class="seal-icon"><i class="ph-fill ph-seal-check"></i></div>
-                    <div style="flex:1;">
-                        <div class="seal-title">Proposta Aceita Digitalmente</div>
-                        <div class="seal-detail">Aceito por: <strong id="ass-nome">---</strong></div>
-                        <div class="seal-detail">Data e Hora: <strong id="ass-data">---</strong></div>
-                        <div class="seal-detail">IP de Origem: <strong id="ass-ip">---</strong></div>
-                        <div class="seal-hash">ID de Validação: <span id="ass-hash" style="font-weight:700;">---</span></div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- FOOTER -->
-        <footer class="prop-footer">
+<!-- PROPOSTA -->
+<div class="proposal-container" id="conteudo-global-proposta">
+    <div id="html-da-proposta">
+        <header class="prop-header">
             <div>
-                <div class="footer-logo">KYNTO<span>.</span></div>
-                <div class="footer-sub">Soluções em Tecnologia da Informação</div>
+                <div class="kynto-logo">KYNTO<span class="dot">.</span></div>
+                <p class="logo-sub">Soluções em Tecnologia da Informação</p>
             </div>
-            <div class="footer-info">
-                <div>Atendimento em Osasco e Região — SP</div>
-                <div>www.kynto.com.br &nbsp;·&nbsp; (11) 91517-0436</div>
+            <div class="prop-header-right">
+                <div class="prop-title">Proposta Comercial</div>
+                <div><span class="prop-ref-badge"><i class="ph-fill ph-hash" style="font-size:10px;"></i><span contenteditable="true" id="prop-ref">KYN-0000</span></span></div>
+                <div class="prop-date" contenteditable="true" id="prop-data">Data: ---</div>
             </div>
-        </footer>
-    </div>
+        </header>
 
-    <!-- MODAL -->
-    <div id="modal-assinatura" class="modal-overlay fixed inset-0 z-50 items-center justify-center hidden px-4">
-        <div class="modal-card">
-            <div class="modal-icon-wrap">
-                <i class="ph-bold ph-check-circle" style="color:#16a34a; font-size:26px;"></i>
+        <div class="parties-strip">
+            <div class="party-col">
+                <div class="party-label">Preparado para</div>
+                <div class="party-name" contenteditable="true">[NOME DA EMPRESA CLIENTE]</div>
+                <div class="party-detail" contenteditable="true">A/C: [Nome do Responsável]</div>
+                <div class="party-detail" contenteditable="true">[Endereço, Osasco - SP]</div>
             </div>
-            <div class="modal-title">Aceitar Proposta</div>
-            <p style="color:#64748b; font-size:13px; line-height:1.65; margin-bottom:20px;">Ao confirmar, você aprova as condições desta proposta e autoriza o início dos serviços da KYNTO.</p>
+            <div class="party-divider"></div>
+            <div class="party-col right">
+                <div class="party-label">Preparado por</div>
+                <div class="party-name">Bruno Dal'Olio Santos</div>
+                <div class="party-detail">Responsável Técnico</div>
+                <div class="party-detail">comercial@kynto.com.br</div>
+                <div class="party-detail">(11) 91517-0436</div>
+            </div>
+        </div>
 
-            <label style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#374151;">Seu Nome Completo</label>
-            <input type="text" id="input-nome-aceite" class="modal-input" placeholder="Ex: João da Silva">
+        <div class="prop-body">
+            <!-- 01 -->
+            <div class="section-wrap">
+                <div class="section-head"><div><div class="section-num">01</div><div class="section-title">Apresentação</div></div></div>
+                <div contenteditable="true" class="apresentacao-text">
+                    <p>Olá, <strong>[Nome do Cliente]</strong>.</p>
+                    <p>Agradecemos a oportunidade de apresentar esta proposta técnica e comercial. A <strong>KYNTO</strong> atua com foco em garantir que a infraestrutura tecnológica da sua empresa funcione com máxima performance, segurança e estabilidade.</p>
+                    <p>Com base em nossa conversa, elaboramos o escopo abaixo focado em resolver seus desafios atuais de forma rápida e definitiva.</p>
+                </div>
+            </div>
 
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-                <button onclick="fecharModal()" style="padding:11px 20px; border-radius:8px; border:1px solid var(--border); background:#fff; color:#64748b; font-weight:600; font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Cancelar</button>
-                <button onclick="enviarAceiteAPI()" style="padding:11px 24px; border-radius:8px; border:none; background:#16a34a; color:#fff; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:8px; font-family:'DM Sans',sans-serif; transition:background 0.15s;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
-                    <i class="ph-bold ph-check"></i> Confirmar Aceite
-                </button>
+            <!-- 02 -->
+            <div class="section-wrap">
+                <div class="section-head">
+                    <div><div class="section-num">02</div><div class="section-title">Escopo dos Serviços</div></div>
+                    <button onclick="adicionarEscopo()" class="add-btn btn-admin no-print"><i class="ph-bold ph-plus"></i> Adicionar Tópico</button>
+                </div>
+                <p style="font-size:13px;color:#64748b;margin-bottom:16px;" contenteditable="true">Propomos a execução dos seguintes serviços e fornecimento de materiais:</p>
+                <div id="lista-escopo">
+                    <div class="escopo-card">
+                        <div class="escopo-icon"><i class="ph-bold ph-wrench"></i></div>
+                        <div style="flex:1;">
+                            <h4 contenteditable="true">Upgrade de Performance</h4>
+                            <p contenteditable="true">Descrição detalhada do serviço a ser realizado...</p>
+                        </div>
+                        <button onclick="this.closest('.escopo-card').remove()" class="btn-admin no-print escopo-del" style="color:#f87171;background:none;border:none;cursor:pointer;padding:6px;font-size:16px;opacity:0;transition:opacity .2s;flex-shrink:0;border-radius:6px;"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03 -->
+            <div class="section-wrap">
+                <div class="section-head">
+                    <div><div class="section-num">03</div><div class="section-title">Investimento</div></div>
+                    <button onclick="adicionarLinhaTabela()" class="add-btn btn-admin no-print"><i class="ph-bold ph-plus"></i> Add Item</button>
+                </div>
+                <div class="table-wrap overflow-x-auto">
+                    <table class="inv-table" id="tabela-orcamento" style="min-width:480px;">
+                        <thead><tr>
+                            <th style="text-align:left;">Descrição do Serviço / Produto</th>
+                            <th style="text-align:center;width:70px;">Qtd</th>
+                            <th style="text-align:right;width:130px;">V. Unitário</th>
+                            <th style="text-align:right;width:130px;">Total</th>
+                            <th class="no-print btn-admin" style="width:40px;"></th>
+                        </tr></thead>
+                        <tbody id="tbody-orcamento">
+                            <tr class="group">
+                                <td contenteditable="true">Serviço / Produto Inicial</td>
+                                <td contenteditable="true" class="calc-qtd" style="text-align:center;">1</td>
+                                <td contenteditable="true" class="calc-valor" style="text-align:right;">R$ 0,00</td>
+                                <td class="calc-total-linha" style="text-align:right;font-weight:600;color:var(--dark);">R$ 0,00</td>
+                                <td class="no-print btn-admin" style="text-align:center;padding:0 8px;">
+                                    <button onclick="removerLinha(this)" class="btn-remove-row" style="color:#f87171;background:none;border:none;cursor:pointer;padding:6px;font-size:14px;border-radius:4px;"><i class="ph-bold ph-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot><tr>
+                            <td colspan="3" style="text-align:right;padding-right:18px;">Total do Investimento</td>
+                            <td class="total-cell" id="calc-total-geral" style="text-align:right;">R$ 0,00</td>
+                            <td class="no-print btn-admin"></td>
+                        </tr></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 04 -->
+            <div class="section-wrap" style="margin-bottom:0;">
+                <div class="section-head"><div><div class="section-num">04</div><div class="section-title">Condições Gerais</div></div></div>
+                <div class="condition-grid">
+                    <div class="condition-item" contenteditable="true"><div class="cond-label"><i class="ph-fill ph-currency-circle-dollar"></i> Pagamento</div>50% na aprovação da proposta e 50% na conclusão. Via PIX ou Cartão.</div>
+                    <div class="condition-item" contenteditable="true"><div class="cond-label"><i class="ph-fill ph-clock"></i> Prazo</div>Até 2 dias úteis após o aceite da proposta.</div>
+                    <div class="condition-item" contenteditable="true"><div class="cond-label"><i class="ph-fill ph-shield-check"></i> Garantia</div>90 dias de garantia sobre o serviço técnico prestado.</div>
+                    <div class="condition-item" contenteditable="true"><div class="cond-label"><i class="ph-fill ph-calendar-check"></i> Validade</div>Esta proposta é válida por 5 dias corridos.</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        window.onload = async function() {
-            const params = new URLSearchParams(window.location.search);
-            const idProposta = params.get('id');
-
-            if (idProposta) {
-                prepararModoCliente();
-                await carregarProposta(idProposta);
-            } else {
-                const data = new Date();
-                const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-                document.getElementById('prop-data').innerText = `${data.getDate()} de ${meses[data.getMonth()]} de ${data.getFullYear()}`;
-                const diaF = String(data.getDate()).padStart(2,'0');
-                const mesF = String(data.getMonth()+1).padStart(2,'0');
-                const cod = Math.random().toString(36).substring(2,5).toUpperCase();
-                document.getElementById('prop-ref').innerText = `#KYN-${data.getFullYear()}${mesF}${diaF}-${cod}`;
-            }
-
-            // Hover dos botões de delete no escopo
-            document.addEventListener('mouseover', function(e) {
-                const card = e.target.closest('.escopo-card');
-                if (card) {
-                    const btn = card.querySelector('.escopo-del-btn');
-                    if (btn) btn.style.opacity = '1';
-                }
-            });
-            document.addEventListener('mouseout', function(e) {
-                const card = e.target.closest('.escopo-card');
-                if (card && !card.contains(e.relatedTarget)) {
-                    const btn = card.querySelector('.escopo-del-btn');
-                    if (btn) btn.style.opacity = '0';
-                }
-            });
-        }
-
-        // ===== CÁLCULOS =====
-        function parseMoeda(str) {
-            if (!str) return 0;
-            let val = parseFloat(str.replace(/[R$\s\.]/g,'').replace(',','.'));
-            return isNaN(val) ? 0 : val;
-        }
-        function formataMoeda(num) {
-            return num.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
-        }
-        function recalcularTabela() {
-            const linhas = document.querySelectorAll('#tbody-orcamento tr');
-            let totalGeral = 0;
-            linhas.forEach(linha => {
-                const qtdEl = linha.querySelector('.calc-qtd');
-                const valorEl = linha.querySelector('.calc-valor');
-                const totalLinhaEl = linha.querySelector('.calc-total-linha');
-                if (qtdEl && valorEl && totalLinhaEl) {
-                    const qtd = parseFloat(qtdEl.innerText) || 0;
-                    const valor = parseMoeda(valorEl.innerText);
-                    const subtotal = qtd * valor;
-                    totalLinhaEl.innerText = formataMoeda(subtotal);
-                    totalGeral += subtotal;
-                }
-            });
-            document.getElementById('calc-total-geral').innerText = formataMoeda(totalGeral);
-        }
-
-        document.getElementById('tabela-orcamento').addEventListener('input', function(e) {
-            if (e.target.classList.contains('calc-qtd') || e.target.classList.contains('calc-valor')) recalcularTabela();
-        });
-        document.getElementById('tabela-orcamento').addEventListener('focusout', function(e) {
-            if (e.target.classList.contains('calc-valor')) {
-                e.target.innerText = formataMoeda(parseMoeda(e.target.innerText));
-                recalcularTabela();
-            }
-        });
-
-        function adicionarLinhaTabela() {
-            const tbody = document.getElementById('tbody-orcamento');
-            const tr = document.createElement('tr');
-            tr.className = 'group';
-            tr.innerHTML = `
-                <td contenteditable="true">Novo Item</td>
-                <td contenteditable="true" class="calc-qtd" style="text-align:center;">1</td>
-                <td contenteditable="true" class="calc-valor" style="text-align:right;">R$ 0,00</td>
-                <td class="calc-total-linha" style="text-align:right; font-weight:600; color:var(--dark);">R$ 0,00</td>
-                <td class="no-print btn-admin" style="text-align:center; padding:0 8px;">
-                    <button onclick="removerLinha(this)" class="btn-remove-row" style="color:#f87171; background:none; border:none; cursor:pointer; padding:6px; font-size:14px; border-radius:4px; transition:background 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='none'">
-                        <i class="ph-bold ph-trash"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-            recalcularTabela();
-        }
-        function removerLinha(botao) { botao.closest('tr').remove(); recalcularTabela(); }
-
-        function adicionarEscopo() {
-            const lista = document.getElementById('lista-escopo');
-            const div = document.createElement('div');
-            div.className = 'escopo-card';
-            div.innerHTML = `
-                <div class="escopo-icon"><i class="ph-bold ph-gear"></i></div>
+    <div class="seal-wrap">
+        <section id="area-assinatura" class="hidden" style="margin-top:8px;padding-top:28px;border-top:1px solid var(--border);">
+            <div class="seal-box">
+                <div class="seal-icon"><i class="ph-fill ph-seal-check success-check"></i></div>
                 <div style="flex:1;">
-                    <h4 contenteditable="true">Novo Serviço</h4>
-                    <p contenteditable="true">Descreva o serviço aqui...</p>
+                    <div class="seal-title">Proposta Aceita Digitalmente</div>
+                    <div class="seal-detail">Aceito por: <strong id="ass-nome">---</strong></div>
+                    <div class="seal-detail">Data e Hora: <strong id="ass-data">---</strong></div>
+                    <div class="seal-detail">IP de Origem: <strong id="ass-ip">---</strong></div>
+                    <div class="seal-hash">ID de Validação: <span id="ass-hash" style="font-weight:700;">---</span></div>
                 </div>
-                <button onclick="this.closest('.escopo-card').remove()" class="btn-admin no-print escopo-del-btn" style="color:#f87171; background:none; border:none; cursor:pointer; padding:4px 6px; font-size:16px; opacity:0; transition:opacity 0.2s; flex-shrink:0; border-radius:6px;">
-                    <i class="ph-bold ph-trash"></i>
-                </button>
-            `;
-            lista.appendChild(div);
-        }
+            </div>
+        </section>
+    </div>
 
-        // ===== API =====
-        function prepararModoCliente() {
-            document.getElementById('body-app').classList.remove('modo-edicao');
-            document.getElementById('body-app').classList.add('modo-cliente');
-            document.getElementById('controles-cliente').classList.remove('hidden');
-            document.getElementById('controles-cliente').classList.add('flex');
-            const av = document.getElementById('aviso-admin');
-            if (av) av.remove();
-        }
+    <footer class="prop-footer">
+        <div>
+            <div class="footer-logo">KYNTO<span class="dot">.</span></div>
+            <div class="footer-sub">Soluções em Tecnologia da Informação</div>
+        </div>
+        <div class="footer-info">
+            <div>Atendimento em Osasco e Região — SP</div>
+            <div>www.kynto.com.br &nbsp;·&nbsp; (11) 91517-0436</div>
+        </div>
+    </footer>
+</div>
 
-        async function salvarPropostaAPI() {
-            const divHtml = document.getElementById('html-da-proposta').cloneNode(true);
-            divHtml.querySelectorAll('.btn-admin').forEach(b => b.remove());
-            divHtml.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
-            const htmlFinal = divHtml.innerHTML;
-            document.getElementById('loader').style.display = 'flex';
-            try {
-                const r = await fetch('/api/salvar', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({conteudo_html:htmlFinal}) });
-                const d = await r.json();
-                document.getElementById('loader').style.display = 'none';
-                if (d.success) {
-                    const link = window.location.origin + window.location.pathname + '?id=' + d.id;
-                    prompt("Proposta salva! Envie este link ao cliente:", link);
-                } else alert("Erro: " + (d.error || "Erro desconhecido"));
-            } catch(err) {
-                document.getElementById('loader').style.display = 'none';
-                alert("Banco não conectado. Publique no servidor.");
-            }
-        }
+<!-- MODAL: LINK GERADO (Admin) -->
+<div id="modal-link" class="modal-overlay">
+    <div class="modal-box" style="max-width:500px;">
+        <div class="modal-icon" style="background:rgba(0,130,205,.1);"><i class="ph-fill ph-check-circle" style="color:var(--blue);"></i></div>
+        <div class="modal-title">Proposta pronta para envio!</div>
+        <p class="modal-desc">Copie o link abaixo e envie para o cliente. Ele poderá visualizar e assinar digitalmente em qualquer dispositivo.</p>
+        <label class="modal-label">Link da proposta</label>
+        <div class="link-box">
+            <span id="link-gerado-text">—</span>
+            <button class="copy-btn" id="btn-copiar-link" onclick="copiarLink()">
+                <i class="ph-bold ph-copy" id="copy-icon"></i><span id="copy-label">Copiar</span>
+            </button>
+        </div>
+        <label class="modal-label">Compartilhar via</label>
+        <div class="share-options">
+            <a id="share-whatsapp" href="#" target="_blank" class="share-btn share-wa"><i class="ph-fill ph-whatsapp-logo"></i> WhatsApp</a>
+            <a id="share-email" href="#" class="share-btn share-email"><i class="ph-bold ph-envelope-simple"></i> E-mail</a>
+        </div>
+        <div class="modal-divider"></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+            <button onclick="fecharModalLink()" class="btn" style="background:#f1f5f9;color:#475569;border:1px solid var(--border);font-family:'DM Sans',sans-serif;">Fechar</button>
+            <button onclick="window.print()" class="btn btn-dark" style="background:#1e293b;color:#fff;font-family:'DM Sans',sans-serif;"><i class="ph-bold ph-file-pdf"></i> Salvar PDF</button>
+        </div>
+    </div>
+</div>
 
-        async function carregarProposta(id) {
-            document.getElementById('loader').style.display = 'flex';
-            try {
-                const r = await fetch(`/api/ler?id=${id}`);
-                const d = await r.json();
-                document.getElementById('loader').style.display = 'none';
-                if (d.error) {
-                    document.getElementById('html-da-proposta').innerHTML = `<p style="text-align:center;color:#ef4444;padding:80px 20px;font-weight:700;font-family:'Syne',sans-serif;">Proposta não encontrada.</p>`;
-                    document.getElementById('controles-cliente').classList.add('hidden');
-                    return;
-                }
-                document.getElementById('html-da-proposta').innerHTML = d.conteudo_html;
-                if (d.status === 'aceito') mostrarSelo(d);
-            } catch(err) {
-                document.getElementById('loader').style.display = 'none';
-            }
-        }
+<!-- MODAL: ACEITAR (Cliente) -->
+<div id="modal-assinatura" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-icon" style="background:rgba(22,163,74,.1);"><i class="ph-bold ph-pen-nib" style="color:#16a34a;font-size:24px;"></i></div>
+        <div class="modal-title">Assinar Proposta</div>
+        <p class="modal-desc">Ao confirmar, você aprova as condições desta proposta e autoriza o início dos serviços da KYNTO.</p>
+        <label class="modal-label" for="input-nome-aceite">Seu Nome Completo</label>
+        <input type="text" id="input-nome-aceite" class="modal-input" placeholder="Ex: João da Silva">
+        <div style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:10px;">Resumo do Investimento</div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text);">
+                <span>Total</span><strong id="modal-total-resumo" style="color:var(--dark);font-family:'Syne',sans-serif;font-size:16px;">—</strong>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button onclick="fecharModal()" class="btn" style="background:#f1f5f9;color:#475569;border:1px solid var(--border);font-family:'DM Sans',sans-serif;">Cancelar</button>
+            <button onclick="enviarAceiteAPI()" class="btn" style="background:#16a34a;color:#fff;font-family:'DM Sans',sans-serif;box-shadow:0 4px 12px rgba(22,163,74,.3);"><i class="ph-bold ph-check"></i> Confirmar Aceite</button>
+        </div>
+    </div>
+</div>
 
-        function abrirModalAssinatura() { document.getElementById('modal-assinatura').style.display = 'flex'; }
-        function fecharModal() { document.getElementById('modal-assinatura').style.display = 'none'; }
+<!-- MODAL: SUCESSO ACEITE (Cliente) -->
+<div id="modal-aceito" class="modal-overlay">
+    <div class="modal-box" style="text-align:center;">
+        <div style="width:80px;height:80px;border-radius:50%;background:rgba(22,163,74,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:42px;color:#16a34a;"><i class="ph-fill ph-seal-check success-check"></i></div>
+        <div class="modal-title" style="text-align:center;">Proposta Aceita!</div>
+        <p class="modal-desc" style="text-align:center;">Sua confirmação foi registrada com sucesso. Em breve, a equipe KYNTO entrará em contato para iniciar os serviços.</p>
+        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:#166534;text-align:left;line-height:1.8;">
+            <strong style="display:block;margin-bottom:6px;">Próximos passos:</strong>
+            <div>① Aguarde contato da equipe KYNTO</div>
+            <div>② Salve uma cópia desta proposta em PDF</div>
+            <div>③ O ID de validação está registrado na proposta</div>
+        </div>
+        <div class="modal-actions" style="justify-content:center;">
+            <button onclick="fecharModalAceito()" class="btn" style="background:#f1f5f9;color:#475569;border:1px solid var(--border);font-family:'DM Sans',sans-serif;">Ver Proposta</button>
+            <button onclick="window.print()" class="btn" style="background:#16a34a;color:#fff;font-family:'DM Sans',sans-serif;"><i class="ph-bold ph-file-pdf"></i> Salvar PDF</button>
+        </div>
+    </div>
+</div>
 
-        async function enviarAceiteAPI() {
-            const nome = document.getElementById('input-nome-aceite').value;
-            if (!nome) { alert("Digite seu nome para assinar."); return; }
-            const idProposta = new URLSearchParams(window.location.search).get('id');
-            if (!idProposta) return;
-            fecharModal();
-            document.getElementById('loader').style.display = 'flex';
-            try {
-                const r = await fetch('/api/aceitar', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:idProposta, nome_cliente:nome}) });
-                const d = await r.json();
-                document.getElementById('loader').style.display = 'none';
-                if (d.success) { d.nome_cliente = nome; mostrarSelo(d); alert("Proposta aceita com sucesso!"); }
-                else alert("Erro ao assinar.");
-            } catch(err) {
-                document.getElementById('loader').style.display = 'none';
-            }
-        }
+<script>
+    let linkGerado = '';
 
-        function mostrarSelo(dados) {
-            document.getElementById('ass-nome').innerText = dados.nome_cliente;
-            document.getElementById('ass-data').innerText = dados.data_aceite;
-            document.getElementById('ass-ip').innerText = dados.ip_cliente;
-            document.getElementById('ass-hash').innerText = dados.hash_validador;
-            document.getElementById('area-assinatura').classList.remove('hidden');
-            const btn = document.getElementById('btn-aceitar');
-            if (btn) btn.classList.add('hidden');
-            document.getElementById('btn-baixar-pdf').classList.remove('hidden');
-            document.getElementById('btn-baixar-pdf').classList.add('flex');
+    window.onload = async function() {
+        const params = new URLSearchParams(window.location.search);
+        const idProposta = params.get('id');
+        if (idProposta) {
+            prepararModoCliente();
+            await carregarProposta(idProposta);
+        } else {
+            const data = new Date();
+            const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+            document.getElementById('prop-data').innerText = `${data.getDate()} de ${meses[data.getMonth()]} de ${data.getFullYear()}`;
+            const dF = String(data.getDate()).padStart(2,'0');
+            const mF = String(data.getMonth()+1).padStart(2,'0');
+            const cod = Math.random().toString(36).substring(2,5).toUpperCase();
+            document.getElementById('prop-ref').innerText = `KYN-${data.getFullYear()}${mF}${dF}-${cod}`;
         }
+        document.addEventListener('mouseover', e => {
+            const card = e.target.closest('.escopo-card');
+            if (card) { const b = card.querySelector('.escopo-del'); if(b) b.style.opacity='1'; }
+        });
+        document.addEventListener('mouseout', e => {
+            const card = e.target.closest('.escopo-card');
+            if (card && !card.contains(e.relatedTarget)) { const b = card.querySelector('.escopo-del'); if(b) b.style.opacity='0'; }
+        });
+        document.querySelectorAll('.modal-overlay').forEach(o => {
+            o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+        });
+    }
 
-        // ===== WORD =====
-        function exportHTMLtoWord(filename) {
-            const clone = document.getElementById('conteudo-global-proposta').cloneNode(true);
-            clone.querySelectorAll('.no-print').forEach(el => el.remove());
-            clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
-            clone.querySelectorAll('i').forEach(el => el.remove());
-            const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Proposta KYNTO</title><style>body{font-family:'Segoe UI',Arial,sans-serif;color:#333;font-size:11pt;line-height:1.5;}table{width:100%;border-collapse:collapse;margin:15px 0;}th,td{border:1px solid #ddd;padding:10px;}th{background:#f8fafc;font-weight:bold;}</style></head><body>`;
-            const html = preHtml + clone.innerHTML + "</body></html>";
-            const blob = new Blob(['\ufeff', html], {type:'application/msword'});
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename + '.doc';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+    function parseMoeda(str) { if(!str) return 0; return parseFloat(str.replace(/[R$\s\.]/g,'').replace(',','.')) || 0; }
+    function formataMoeda(num) { return num.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+    function recalcularTabela() {
+        let total=0;
+        document.querySelectorAll('#tbody-orcamento tr').forEach(l => {
+            const q=l.querySelector('.calc-qtd'), v=l.querySelector('.calc-valor'), t=l.querySelector('.calc-total-linha');
+            if(q&&v&&t){const s=(parseFloat(q.innerText)||0)*parseMoeda(v.innerText);t.innerText=formataMoeda(s);total+=s;}
+        });
+        document.getElementById('calc-total-geral').innerText=formataMoeda(total);
+    }
+    document.getElementById('tabela-orcamento').addEventListener('input', e => {
+        if(e.target.classList.contains('calc-qtd')||e.target.classList.contains('calc-valor')) recalcularTabela();
+    });
+    document.getElementById('tabela-orcamento').addEventListener('focusout', e => {
+        if(e.target.classList.contains('calc-valor')){e.target.innerText=formataMoeda(parseMoeda(e.target.innerText));recalcularTabela();}
+    });
+
+    function adicionarLinhaTabela() {
+        const tr=document.createElement('tr'); tr.className='group';
+        tr.innerHTML=`<td contenteditable="true">Novo Item</td><td contenteditable="true" class="calc-qtd" style="text-align:center;">1</td><td contenteditable="true" class="calc-valor" style="text-align:right;">R$ 0,00</td><td class="calc-total-linha" style="text-align:right;font-weight:600;color:var(--dark);">R$ 0,00</td><td class="no-print btn-admin" style="text-align:center;padding:0 8px;"><button onclick="removerLinha(this)" class="btn-remove-row" style="color:#f87171;background:none;border:none;cursor:pointer;padding:6px;font-size:14px;border-radius:4px;"><i class="ph-bold ph-trash"></i></button></td>`;
+        document.getElementById('tbody-orcamento').appendChild(tr); recalcularTabela();
+    }
+    function removerLinha(btn) { btn.closest('tr').remove(); recalcularTabela(); }
+    function adicionarEscopo() {
+        const div=document.createElement('div'); div.className='escopo-card';
+        div.innerHTML=`<div class="escopo-icon"><i class="ph-bold ph-gear"></i></div><div style="flex:1;"><h4 contenteditable="true">Novo Serviço</h4><p contenteditable="true">Descreva o serviço aqui...</p></div><button onclick="this.closest('.escopo-card').remove()" class="btn-admin no-print escopo-del" style="color:#f87171;background:none;border:none;cursor:pointer;padding:6px;font-size:16px;opacity:0;transition:opacity .2s;flex-shrink:0;border-radius:6px;"><i class="ph-bold ph-trash"></i></button>`;
+        document.getElementById('lista-escopo').appendChild(div);
+    }
+
+    function prepararModoCliente() {
+        document.getElementById('body-app').classList.remove('modo-edicao');
+        document.getElementById('body-app').classList.add('modo-cliente');
+        document.getElementById('admin-toolbar').style.display='none';
+        document.getElementById('client-banner').style.display='flex';
+    }
+
+    async function salvarPropostaAPI() {
+        const divHtml=document.getElementById('html-da-proposta').cloneNode(true);
+        divHtml.querySelectorAll('.btn-admin').forEach(b=>b.remove());
+        divHtml.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
+        document.getElementById('loader').style.display='flex';
+        try {
+            const r=await fetch('/api/salvar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({conteudo_html:divHtml.innerHTML})});
+            const d=await r.json();
+            document.getElementById('loader').style.display='none';
+            if(d.success){linkGerado=window.location.origin+window.location.pathname+'?id='+d.id;abrirModalLink(linkGerado);}
+            else alert("Erro: "+(d.error||"Erro desconhecido"));
+        } catch(err) {
+            document.getElementById('loader').style.display='none';
+            linkGerado=window.location.href.split('?')[0]+'?id=DEMO-OFFLINE';
+            abrirModalLink(linkGerado);
         }
-    </script>
+    }
+
+    function abrirModalLink(link) {
+        document.getElementById('link-gerado-text').innerText=link;
+        const ref=document.getElementById('prop-ref').innerText;
+        const msg=encodeURIComponent(`Olá! Segue a proposta comercial da KYNTO (${ref}): ${link}`);
+        document.getElementById('share-whatsapp').href=`https://wa.me/?text=${msg}`;
+        document.getElementById('share-email').href=`mailto:?subject=Proposta Comercial KYNTO - ${ref}&body=Olá,%0A%0ASeguem os detalhes da nossa proposta:%0A${link}`;
+        document.getElementById('modal-link').classList.add('open');
+    }
+    function fecharModalLink() { document.getElementById('modal-link').classList.remove('open'); }
+
+    function copiarLink() {
+        navigator.clipboard.writeText(linkGerado).then(() => {
+            const btn=document.getElementById('btn-copiar-link');
+            document.getElementById('copy-icon').className='ph-bold ph-check';
+            document.getElementById('copy-label').innerText='Copiado!';
+            btn.classList.add('copied');
+            setTimeout(()=>{btn.classList.remove('copied');document.getElementById('copy-icon').className='ph-bold ph-copy';document.getElementById('copy-label').innerText='Copiar';},2500);
+        });
+    }
+
+    async function carregarProposta(id) {
+        document.getElementById('loader').style.display='flex';
+        try {
+            const r=await fetch(`/api/ler?id=${id}`);
+            const d=await r.json();
+            document.getElementById('loader').style.display='none';
+            if(d.error){document.getElementById('html-da-proposta').innerHTML=`<p style="text-align:center;color:#ef4444;padding:80px 20px;font-weight:700;font-family:'Syne',sans-serif;">Proposta não encontrada.</p>`;document.getElementById('client-banner').style.display='none';return;}
+            document.getElementById('html-da-proposta').innerHTML=d.conteudo_html;
+            if(d.status==='aceito') mostrarSelo(d);
+        } catch(err){document.getElementById('loader').style.display='none';}
+    }
+
+    function abrirModalAssinatura() {
+        const total=document.getElementById('calc-total-geral')?.innerText||'—';
+        document.getElementById('modal-total-resumo').innerText=total;
+        document.getElementById('modal-assinatura').classList.add('open');
+    }
+    function fecharModal() { document.getElementById('modal-assinatura').classList.remove('open'); }
+    function fecharModalAceito() { document.getElementById('modal-aceito').classList.remove('open'); }
+
+    async function enviarAceiteAPI() {
+        const nome=document.getElementById('input-nome-aceite').value.trim();
+        if(!nome){document.getElementById('input-nome-aceite').style.borderColor='#ef4444';return;}
+        const idProposta=new URLSearchParams(window.location.search).get('id');
+        if(!idProposta) return;
+        fecharModal();
+        document.getElementById('loader').style.display='flex';
+        try {
+            const r=await fetch('/api/aceitar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:idProposta,nome_cliente:nome})});
+            const d=await r.json();
+            document.getElementById('loader').style.display='none';
+            if(d.success){d.nome_cliente=nome;mostrarSelo(d);document.getElementById('modal-aceito').classList.add('open');}
+            else alert("Erro ao assinar.");
+        } catch(err){document.getElementById('loader').style.display='none';}
+    }
+
+    function mostrarSelo(dados) {
+        document.getElementById('ass-nome').innerText=dados.nome_cliente;
+        document.getElementById('ass-data').innerText=dados.data_aceite;
+        document.getElementById('ass-ip').innerText=dados.ip_cliente;
+        document.getElementById('ass-hash').innerText=dados.hash_validador;
+        document.getElementById('area-assinatura').classList.remove('hidden');
+        const btnA=document.getElementById('btn-aceitar');
+        if(btnA) btnA.style.display='none';
+        const btnPdf=document.getElementById('btn-baixar-pdf');
+        if(btnPdf){btnPdf.classList.remove('hidden');btnPdf.classList.add('flex');}
+    }
+
+    function exportHTMLtoWord(filename) {
+        const clone=document.getElementById('conteudo-global-proposta').cloneNode(true);
+        clone.querySelectorAll('.no-print').forEach(el=>el.remove());
+        clone.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
+        clone.querySelectorAll('i').forEach(el=>el.remove());
+        const html=`<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Proposta KYNTO</title><style>body{font-family:'Segoe UI',Arial,sans-serif;color:#333;font-size:11pt;line-height:1.5;}table{width:100%;border-collapse:collapse;margin:15px 0;}th,td{border:1px solid #ddd;padding:10px;}th{background:#f8fafc;font-weight:bold;}</style></head><body>`+clone.innerHTML+`</body></html>`;
+        const blob=new Blob(['\ufeff',html],{type:'application/msword'});
+        const link=document.createElement('a');
+        link.href=URL.createObjectURL(blob);
+        link.download=filename+'.doc';
+        document.body.appendChild(link);link.click();document.body.removeChild(link);
+    }
+</script>
 </body>
 </html>
