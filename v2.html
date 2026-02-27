@@ -231,7 +231,7 @@
                 <div class="party-label">Preparado por</div>
                 <div class="party-name">Bruno Dal'Olio Santos</div>
                 <div class="party-detail">Responsável Técnico</div>
-                <div class="party-detail">comercial@kynto.com.br</div>
+                <div class="party-detail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0d3dfddd5c2d3d9d1dcf0dbc9dec4df9ed3dfdd9ed2c2">[email&#160;protected]</a></div>
                 <div class="party-detail">(11) 91517-0436</div>
             </div>
         </div>
@@ -402,13 +402,18 @@
         </div>
         <div class="modal-actions" style="justify-content:center;">
             <button onclick="fecharModalAceito()" class="btn" style="background:#f1f5f9;color:#475569;border:1px solid var(--border);font-family:'DM Sans',sans-serif;">Ver Proposta</button>
-            <button onclick="window.print()" class="btn" style="background:#16a34a;color:#fff;font-family:'DM Sans',sans-serif;"><i class="ph-bold ph-file-pdf"></i> Salvar PDF</button>
+            <button onclick="salvarPDFAposAceite()" class="btn" style="background:#16a34a;color:#fff;font-family:'DM Sans',sans-serif;"><i class="ph-bold ph-file-pdf"></i> Salvar PDF</button>
         </div>
     </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     let linkGerado = '';
+
+    function salvarPDFAposAceite() {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+        setTimeout(() => window.print(), 180);
+    }
 
     window.onload = async function() {
         const params = new URLSearchParams(window.location.search);
@@ -567,11 +572,4 @@
         clone.querySelectorAll('i').forEach(el=>el.remove());
         const html=`<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Proposta KYNTO</title><style>body{font-family:'Segoe UI',Arial,sans-serif;color:#333;font-size:11pt;line-height:1.5;}table{width:100%;border-collapse:collapse;margin:15px 0;}th,td{border:1px solid #ddd;padding:10px;}th{background:#f8fafc;font-weight:bold;}</style></head><body>`+clone.innerHTML+`</body></html>`;
         const blob=new Blob(['\ufeff',html],{type:'application/msword'});
-        const link=document.createElement('a');
-        link.href=URL.createObjectURL(blob);
-        link.download=filename+'.doc';
-        document.body.appendChild(link);link.click();document.body.removeChild(link);
-    }
-</script>
-</body>
-</html>
+        const lin
